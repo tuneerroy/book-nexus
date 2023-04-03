@@ -4,7 +4,7 @@ import '../App.css'
 function Header() {
     return (
         <div className='headerContainer'>
-            Boox Nexus
+            Book Nexus
         </div>
     )
 }
