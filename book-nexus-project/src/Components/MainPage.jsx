@@ -2,7 +2,9 @@ import React from 'react'
 
 function MainPage() {
     return <div className='mainPage'>
-        Main Page
+        <div className='mainPageText'>
+            Welcome
+        </div>
     </div>
 }
 
