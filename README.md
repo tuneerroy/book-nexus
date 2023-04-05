@@ -7,4 +7,5 @@ Through our application, you will be able to view details of top rated authors a
 
 ## Guide to repo:
 The src directory contains the main page of the appliaction, and all the React components for the project.
+The backend directory contains the backend of the application.
 
