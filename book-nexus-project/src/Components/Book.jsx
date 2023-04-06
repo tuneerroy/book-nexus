@@ -12,22 +12,19 @@ function Book(props) {
     } = props;
 
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ width: 345 }}>
         <CardMedia
                 sx={{ height: 140 }}
                 image={image_link}
                 title={title}
         />
         
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+        <CardContent sx={{display: 'flex', justifyContent: 'end', flexDirection: 'column'}}>
+          <Typography gutterBottom variant="h5" component="div" sx={{textAlign: 'center'}}>
             {title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{display: 'flex', justifyContent: 'center', padding: 0}}>
           <Button size="small">Learn More</Button>
         </CardActions>
       </Card>
