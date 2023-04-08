@@ -1,9 +1,8 @@
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 // dotenv.config({ path: path.join(__dirname, '/../.env') });
 
 // Creates MySQL connection using database credential provided in config.json
 // Do not edit. If the connection fails, make sure to check that config.json is filled out correctly
-
 
 /******************
  * WARM UP ROUTES *
@@ -197,7 +196,7 @@ const dotenv = require('dotenv');
 //   //   plays_low (int)* (default: 0), plays_high (int)* (default:
 //   //   1100000000), danceability_low (int)* (default: 0), danceability_high (int)* (default:
 //   //   1), energy_low (int)* (default: 0), energy_high (int)* (default: 1), valence_low (int)*
-//   //   (default: 0), valence_high (int)* (default: 1), 
+//   //   (default: 0), valence_high (int)* (default: 1),
 
 //   const playsLow = req.query.plays_low ?? 0;
 //   const playsHigh = req.query.plays_high ?? 1100000000;
