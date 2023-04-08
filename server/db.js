@@ -1,5 +1,5 @@
 const mysql = require("mysql");
-const { afterAll } = require('jest');
+// const { afterAll } = require("@jest/globals");
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,

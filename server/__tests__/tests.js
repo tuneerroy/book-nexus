@@ -1,19 +1,25 @@
-const { expect } = require("@jest/globals");
+const { expect, afterAll } = require("@jest/globals");
 const supertest = require("supertest");
-const app = require("../server");
+const server = require("../server");
 const connection = require("../db");
 const results = require("./results.json");
-const { afterAll } = require('jest');
 
 afterAll((done) => {
-  app.close(done);
   connection.end();
+  server.close(done);
 });
+
+// describe("GET /author/name", () => {
+//   test("should return 200 OK", async () => {
+//     await supertest(server)
+//       .get("/author/name")
+//       .expect(200);
+//   });
+// })
 
 test("NOTHING", () => {
   expect(true).toBe(true);
 });
-
 
 // test("GET /author/name", async () => {
 //   await supertest(app)

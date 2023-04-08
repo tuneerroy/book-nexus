@@ -5,7 +5,7 @@ dotenv.config({ path: path.join(__dirname, "/../.env") });
 const express = require("express");
 const bookRouter = require("./routes/Book");
 const morgan = require("morgan");
-// const { afterAll } = require('jest');
+// const { afterAll } = require("@jest/globals");
 
 const app = express();
 app.use(morgan("dev"));
@@ -20,7 +20,7 @@ const server = app.listen(port, () => {
 
 // afterAll(done => {
 //   server.close(done);
-// // });
+// });
 
 // Stop the server when the process is terminated
 process.on('SIGTERM', () => {
@@ -29,5 +29,5 @@ process.on('SIGTERM', () => {
   });
 });
 
-module.exports = app;
+module.exports = server;
 
