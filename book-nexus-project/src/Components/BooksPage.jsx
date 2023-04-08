@@ -1,10 +1,20 @@
-import React from 'react'
+
+import React, { useEffect } from 'react'
 import books from '../TestBookData';
 import Book from './Book'
 import './styles.css'
 import Grid from '@mui/material/Grid';
+import { useParams } from 'react-router-dom';
+import { getBooks } from '../api';
 
 function BooksPage() {
+
+// for testing
+    // useEffect(() => {
+    //   getBooks(['Fiction'], [], 2000, 2003, 2, 4).then((data) => {
+    //     console.log(data);
+    //   });
+    // }, []);
 
     return (
         <div className='bookFeed'>
@@ -25,8 +35,6 @@ function BooksPage() {
                 ))
             }
             </Grid>
-        </div>
-    )
 }
 
 export default BooksPage;
