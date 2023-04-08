@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "jest --coverage"
+    "test": "jest --detectOpenHandles --coverage"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -12,4 +12,8 @@ const connection = mysql.createConnection({
 });
 connection.connect((err) => err && console.log(err));
 
+afterAll(done => {
+  connection.end(done);
+});
+
 module.exports = connection;

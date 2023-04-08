@@ -9,8 +9,12 @@ const port = 8000;
 
 app.use("/api/books", bookRouter);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server running on port ${port}!`);
+});
+
+afterAll(done => {
+  server.close(done);
 });
 
 module.exports = app;
