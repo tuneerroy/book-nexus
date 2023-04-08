@@ -3,8 +3,8 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { NavLink } from 'react-router-dom';
 
 function Book(props) {
     const {
@@ -25,7 +25,8 @@ function Book(props) {
           </Typography>
         </CardContent>
         <CardActions sx={{display: 'flex', justifyContent: 'center', padding: 0}}>
-          <Button size="small">Learn More</Button>
+          {/* <Button size="small">Learn More</Button> */}
+          <NavLink to={`books/${isbn}`}>Learn More</NavLink>
         </CardActions>
       </Card>
     )
