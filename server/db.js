@@ -1,7 +1,5 @@
 const mysql = require("mysql");
-const dotenv = require("dotenv");
-const path = require("path");
-dotenv.config({ path: path.join(__dirname, "/../.env") });
+const { afterAll } = require('jest');
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -12,8 +10,12 @@ const connection = mysql.createConnection({
 });
 connection.connect((err) => err && console.log(err));
 
-afterAll(done => {
-  connection.end(done);
+process.on("exit", () => {
+  connection.end();
 });
+
+// afterAll(done => {
+//   connection.end(done);
+// });
 
 module.exports = connection;

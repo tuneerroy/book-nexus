@@ -1,7 +1,14 @@
 const { expect } = require("@jest/globals");
 const supertest = require("supertest");
 const app = require("../server");
+const connection = require("../db");
 const results = require("./results.json");
+const { afterAll } = require('jest');
+
+afterAll((done) => {
+  app.close(done);
+  connection.end();
+});
 
 test("NOTHING", () => {
   expect(true).toBe(true);
