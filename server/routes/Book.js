@@ -3,6 +3,20 @@ const router = express.Router();
 const db = require('../db');
 const helpers = require('../helpers');
 
+router.get('/test', (req, res) => {
+  const query = `
+    SELECT * FROM Book
+    LIMIT 10
+  `;
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('DB Error');
+    }
+    res.json(results);
+  });
+});
+
 // get all books with filters
 router.get('/', (req, res) => {
   const query = `
@@ -15,8 +29,12 @@ router.get('/', (req, res) => {
       HAVING AVG(rating) >= ${req.query.rating_low} AND AVG(rating) <= ${req.query.rating_high}
     ORDER BY AVG(rating) DESC, COUNT(rating) DESC
   `;
+  console.log(query)
   db.query(query, (err, results) => {
-    if (err) return res.status(500).send('DB Error');
+    if (err) {
+      console.error(err);
+      return res.status(500).send('DB Error');
+    }
     results.forEach((result) => {
       result.categories = result.categories.split(';');
       result.authors = result.authors.split(';');
@@ -33,7 +51,10 @@ router.get('/:isbn', (req, res) => {
     WHERE isbn = '${req.params.isbn}'
   `;
   db.query(query, (err, results) => {
-    if (err) return res.status(500).send('DB Error');
+    if (err) {
+      console.error(err);
+      return res.status(500).send('DB Error');
+    }
     if (results.length === 0) return res.status(404).send('Book not found');
     results[0].categories = results[0].categories.split(';');
     results[0].authors = results[0].authors.split(';');
@@ -60,7 +81,10 @@ router.get('/recommendations/category', (req, res) => {
     ORDER BY book_preference DESC, COUNT(rating) DESC, AVG(rating) DESC
   `;
   db.query(query, (err, results) => {
-    if (err) return res.status(500).send('DB Error');
+    if (err) {
+      console.error(err);
+      return res.status(500).send('DB Error');
+    }    
     results.forEach((result) => {
       result.categories = result.categories.split(';');
       result.authors = result.authors.split(';');
