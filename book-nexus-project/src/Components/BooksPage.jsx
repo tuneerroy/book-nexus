@@ -35,6 +35,8 @@ function BooksPage() {
                 ))
             }
             </Grid>
+        </div>
+    )
 }
 
 export default BooksPage;
