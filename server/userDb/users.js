@@ -2,8 +2,8 @@ const { Schema } = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String },
   authors: [{ type: String }],
   books: [{ type: String }]
 });
@@ -11,17 +11,18 @@ const userSchema = new Schema({
 userSchema.pre('save', async function(next) {
   if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(this.password, salt);
-    this.password = hash;
+    this.password = bcrypt.hash(this.password, salt);
     await this.save();
   }
   return next();
 });
 
-userSchema.statics.createAccount = async function(username, password) {
-  const User = this;
-  const user = new User({ username, password });
-  await user.save();
+userSchema.statics.getOrCreate = async function(email) {
+  const user = await this.findOne({ email });
+  if (!user) {
+    user = await this.create({ email });
+    user.save();
+  }
   return user;
 };
 
