@@ -1,20 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+import { NavLink } from 'react-router-dom';
 
 function MainPage() {
-    useEffect(() => {
-        // test route
-        fetch('/api/books/test')
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
-            })
-            .catch(err => console.log(err))
-    }, []);
-
-
     return <div className='mainPage'>
         <div className='mainPageText'>
             Welcome
+            <NavLink to={`/books`} className="title">All Books</NavLink>
+            <NavLink to={`/authors`} className="title">All Authors</NavLink>
         </div>
     </div>
 }

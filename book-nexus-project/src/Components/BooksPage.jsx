@@ -1,20 +1,21 @@
-
-import React, { useEffect } from 'react'
-import books from '../TestBookData';
+import React, { useEffect, useState } from 'react'
 import Book from './Book'
 import './styles.css'
 import Grid from '@mui/material/Grid';
-import { useParams } from 'react-router-dom';
-import { getBooks } from '../api';
+
 
 function BooksPage() {
 
-// for testing
-    // useEffect(() => {
-    //   getBooks(['Fiction'], [], 2000, 2003, 2, 4).then((data) => {
-    //     console.log(data);
-    //   });
-    // }, []);
+    const [books, setBooks] = useState([]);
+
+    useEffect(() => {
+        fetch('/api/books/test')
+            .then(res => res.json())
+            .then(data => {
+                setBooks(data)
+            })
+            .catch(err => console.log(err))
+    }, []);
 
     return (
         <div className='bookFeed'>

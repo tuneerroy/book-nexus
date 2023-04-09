@@ -1,10 +1,11 @@
 import React from 'react';
 import '../App.css'
+import { NavLink } from 'react-router-dom';
 
 function Header() {
     return (
         <div className='headerContainer'>
-            Book Nexus
+            <NavLink to={`../`} className="title">Book Nexus</NavLink>
         </div>
     )
 }
