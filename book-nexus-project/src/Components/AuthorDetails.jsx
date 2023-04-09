@@ -30,7 +30,7 @@ function AuthorDetails() {
       </div>
       <div>
         <h2 className='text-2xl font-semibold my-5'>Top Books by {authorName}</h2>
-        <BookRow getBooks={() => getBooks({'categories': ['Fiction'], 'rating_high': 3.0, pageSize: 7, page: 1})}/>
+        <BookRow getBooks={() => getBooks({'authors': [`Tad Tuleja`], pageSize: 7, page: 1})}/>
       </div>
     </div>
   )
