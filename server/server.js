@@ -27,8 +27,8 @@ app.use(session({
 }))
 
 app.use("/api/auth", accountsRouter);
-app.use("/api/favorites", auth, favoriteRouter);
-app.use("/api/books", auth, bookRouter);
+app.use("/api/favorites", favoriteRouter);
+app.use("/api/books", bookRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', (req, res) => {
