@@ -4,6 +4,9 @@ dotenv.config({ path: path.join(__dirname, "/../.env") });
 
 const express = require("express");
 const morgan = require("morgan");
+const passport = require("passport");
+const session = require("express-session");
+
 const accountsRouter = require("./routes/accounts");
 const favoriteRouter = require("./routes/favorites");
 const bookRouter = require("./routes/books");
@@ -27,9 +30,9 @@ app.use("/api/auth", accountsRouter);
 app.use("/api/favorites", auth, favoriteRouter);
 app.use("/api/books", auth, bookRouter);
 
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, 'build')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'));
+  res.sendFile(path.join(__dirname, 'build/index.html'));
 });
 
 const port = 8000;
