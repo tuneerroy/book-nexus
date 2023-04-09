@@ -27,6 +27,11 @@ app.use("/api/auth", accountsRouter);
 app.use("/api/favorites", auth, favoriteRouter);
 app.use("/api/books", auth, bookRouter);
 
+app.use(express.static(path.join(__dirname, '../build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+});
+
 const port = 8000;
 const server = app.listen(port, () => {
   console.log(`Server running on port ${port}!`);
