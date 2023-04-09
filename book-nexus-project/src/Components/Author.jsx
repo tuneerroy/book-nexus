@@ -17,9 +17,6 @@ function Author(props) {
             {name}
           </Typography>
         </CardContent>
-        <CardActions sx={{display: 'flex', justifyContent: 'center', padding: 0}}>
-          <NavLink to={`${isbn}`}>Learn More</NavLink>
-        </CardActions>
       </Card>
     )
 }
