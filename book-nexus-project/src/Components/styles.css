@@ -3,3 +3,8 @@
     margin-top: 2em;
     flex-direction: column;
 }
+
+.bookImage {
+    height: 300px;
+    object-fit: fill;
+}

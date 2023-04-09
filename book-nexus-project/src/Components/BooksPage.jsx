@@ -5,8 +5,10 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {Accordion, AccordionSummary, AccordionDetails} from '@mui/material';
-import ExpandIcon from '@mui/icons-material/Expand';
+import {Accordion, AccordionSummary, AccordionDetails, Typography} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { ThemeProvider } from '@emotion/react';
+import { createTheme } from "@mui/material";
 
 function BooksPage() {
 
@@ -21,50 +23,82 @@ function BooksPage() {
             .catch(err => console.log(err))
     }, []);
 
+    const theme = createTheme({
+        typography: {
+        //   fontFamily: 'Times New Roman, Arial',
+        //   htmlFontSize: '12',
+        }
+      });
+
     return (
         <Box className='bookFeed' sx={{marginBottom: 2, width: '90%', marginX: 'auto'}}>
-            <Accordion>
-                <AccordionSummary expandIcon={<ExpandIcon />}>
-                    <h3>Book Form</h3>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <form>
-                        <Grid container spacing={2}>
-                            <Grid item xs={1}>
-                                <TextField
-                                    label="Title"
-                                    variant="outlined"
-                                />
+            <Box sx={{width: '75%', marginX: 'auto'}}>
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <ThemeProvider theme={theme}>
+                            <Typography variant="h5">Search Books</Typography>
+                        </ThemeProvider>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <form>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <ThemeProvider theme={theme}>
+                                        <Typography>
+                                            <TextField
+                                                label="Title"
+                                                variant="standard"
+                                                fullWidth
+                                            />
+                                        </Typography>
+                                    </ThemeProvider>
                                 </Grid>
-                            <Grid item xs={1}>
-                                <TextField
-                                    label="Authors"
-                                    variant="outlined"
-                                />
+                                <Grid item xs={12}>
+                                    <ThemeProvider theme={theme}>
+                                        <Typography>
+                                            <TextField
+                                                label="Authors"
+                                                variant="standard"
+                                                fullWidth
+                                            />
+                                        </Typography>
+                                    </ThemeProvider>
                                 </Grid>
-                            <Grid item xs={1}>
-                                <TextField
-                                    label="Genres"
-                                    variant="outlined"
-                                />
+                                <Grid item xs={12}>
+                                    <ThemeProvider theme={theme}>
+                                        <Typography>
+                                            <TextField
+                                                label="Genres"
+                                                variant="standard"
+                                                fullWidth
+                                            />
+                                        </Typography>
+                                    </ThemeProvider>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <ThemeProvider theme={theme}>
+                                        <Typography>
+                                            <TextField
+                                            label="Year"
+                                            variant="standard"
+                                            type="number"
+                                            InputProps={{ inputProps: { min: 0 } }}
+                                            fullWidth
+                                            />
+                                        </Typography>
+                                    </ThemeProvider>
+                                    
+                                </Grid>
+                                <Grid item xs={12} sx={{marginTop: 1}}>
+                                    <Button variant="contained" color="info" type="submit">
+                                        Submit
+                                    </Button>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={1}>
-                                <TextField
-                                    label="Year"
-                                    variant="outlined"
-                                    type="number"
-                                    InputProps={{ inputProps: { min: 0 } }}
-                                />
-                            </Grid>
-                            <Grid item xs={2} sx={{marginTop: 1}}>
-                                <Button variant="contained" color="primary" type="submit">
-                                    Submit
-                                </Button>
-                            </Grid>
-                        </Grid>
-                        </form>
-                    </AccordionDetails>
-            </Accordion>
+                            </form>
+                        </AccordionDetails>
+                </Accordion>
+            </Box>
 
             <Grid container spacing={2} sx={{marginTop: 2}}>
             {
