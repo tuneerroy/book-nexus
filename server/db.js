@@ -1,5 +1,4 @@
 const mysql = require("mysql");
-// const { afterAll } = require("@jest/globals");
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -9,13 +8,5 @@ const connection = mysql.createConnection({
   database: process.env.DB_DATABASE,
 });
 connection.connect((err) => err && console.log(err));
-
-// process.on("exit", () => {
-//   connection.end();
-// });
-
-// afterAll(done => {
-//   connection.end(done);
-// });
 
 module.exports = connection;
