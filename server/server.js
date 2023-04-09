@@ -23,11 +23,11 @@ const server = app.listen(port, () => {
 // });
 
 // Stop the server when the process is terminated
-process.on('SIGTERM', () => {
-  server.close(() => {
-    console.log('Server stopped');
-  });
-});
+// process.on('SIGTERM', () => {
+//   server.close(() => {
+//     console.log('Server stopped');
+//   });
+// });
 
 module.exports = server;
 

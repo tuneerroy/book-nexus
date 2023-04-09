@@ -10,9 +10,9 @@ const connection = mysql.createConnection({
 });
 connection.connect((err) => err && console.log(err));
 
-process.on("exit", () => {
-  connection.end();
-});
+// process.on("exit", () => {
+//   connection.end();
+// });
 
 // afterAll(done => {
 //   connection.end(done);
