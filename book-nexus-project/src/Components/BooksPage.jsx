@@ -1,11 +1,8 @@
-
 import React, { useEffect, useState } from 'react'
-import books from '../TestBookData';
 import Book from './Book'
 import './styles.css'
 import Grid from '@mui/material/Grid';
-import { useParams } from 'react-router-dom';
-import { getBooks } from '../api';
+
 
 function BooksPage() {
 
