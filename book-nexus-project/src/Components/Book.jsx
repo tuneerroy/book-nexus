@@ -12,9 +12,9 @@ function Book(props) {
     } = props;
 
     return (
-        <Card sx={{ width: 345 }}>
+        <Card sx={{ width: '345px' }}>
         <CardMedia
-                sx={{ height: 140 }}
+                sx={{ minHeight: '140px', objectFit: 'contain', backgroundColor: 'black' }}
                 image={image_link}
                 title={title}
         />
@@ -25,8 +25,7 @@ function Book(props) {
           </Typography>
         </CardContent>
         <CardActions sx={{display: 'flex', justifyContent: 'center', padding: 0}}>
-          {/* <Button size="small">Learn More</Button> */}
-          <NavLink to={`books/${isbn}`}>Learn More</NavLink>
+          <NavLink to={`${isbn}`}>Learn More</NavLink>
         </CardActions>
       </Card>
     )
