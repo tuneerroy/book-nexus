@@ -2,22 +2,29 @@ import React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { NavLink } from 'react-router-dom';
+import './styles.css'
 
 function Book(props) {
     const {
         isbn, title, image_link
     } = props;
 
+    const handleImageLoad = (e) => {
+      if (e.target.naturalWidth === 1 && e.target.naturalHeight === 1) {
+        e.target.src = 'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg';
+      }
+    }
+
     return (
-        <Card sx={{ width: '250px', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
-        <CardMedia
-                sx={{ minHeight: '140px', maxHeight: '500px', objectFit: 'contain', backgroundColor: 'black' }}
-                image={image_link}
+        <Card sx={{ width: '250px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRadius: '10px' }}>
+        <img
+                className="min-w-[160px] bookImage"
+                src={image_link}
+                alt={title}
                 title={title}
-                component="img"
+                onLoad={handleImageLoad}
         />
         <CardContent sx={{display: 'flex', justifyContent: 'end', flexDirection: 'column'}}>
           <Typography gutterBottom variant="h6" component="div" sx={{textAlign: 'center'}}>
