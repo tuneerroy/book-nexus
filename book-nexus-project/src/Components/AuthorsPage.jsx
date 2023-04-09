@@ -8,6 +8,7 @@ function AuthorsPage() {
 
     const [authors, setAuthors] = useState([]);
 
+    //TODO
     useEffect(() => {
         fetch('/api/authors')
             .then(res => res.json())
