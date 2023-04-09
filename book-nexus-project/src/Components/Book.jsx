@@ -2,14 +2,13 @@ import React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Box from '@mui/material/Box';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { NavLink } from 'react-router-dom';
 
 function Book(props) {
     const {
-        isbn, title, year, description, image_link
+        isbn, title, image_link
     } = props;
 
     return (
