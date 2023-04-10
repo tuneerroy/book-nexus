@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-mongoose.connect('');
+mongoose.connect('')
 
-const db = mongoose.connection;
+const db = mongoose.connection
 db.on('connected', () => {
-    console.log("Connected to MongoDB")
-});
+  console.log('Connected to MongoDB')
+})
 
-module.exports = db;
+module.exports = db
