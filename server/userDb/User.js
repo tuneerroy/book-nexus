@@ -21,12 +21,4 @@ userSchema.statics.checkPassword = async function(email, password) {
   return user?.password && await bcrypt.compare(password, user.password)
 }
 
-// userSchema.statics.getOrCreate = async function(email) {
-//   let user = await this.findOne({email})
-//   if (!user) {
-//     user = await this.create({email})
-//   }
-//   return user
-// }
-
 module.exports = mongoose.model('User', userSchema)

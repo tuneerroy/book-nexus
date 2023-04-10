@@ -15,10 +15,8 @@ passport.use(new GoogleStrategy({
   callbackURL: 'https://book-nexus.herokuapp.com/api/auth/google/callback',
   profileFields: ['email'],
 }, async (_accessToken, _refreshToken, profile, done) => {
-    const user = await getOrCreate("test@test.com")
-    console.error(profile)
-//   const user = await User.getOrCreate({email: profile.emails[0].value})
-  done(null, user)
+    const user = await getOrCreateUser(profile.emails[0].value)
+    done(null, user)
 }))
 
 passport.use(new FacebookStrategy({
@@ -27,10 +25,8 @@ passport.use(new FacebookStrategy({
   callbackURL: 'https://book-nexus.herokuapp.com/api/auth/facebook/callback',
   profileFields: ['email'],
 }, async (_accessToken, _refreshToken, profile, done) => {
-//   const user = await User.getOrCreate({email: profile.emails[0].value})
-    const user = await getOrCreate("test@test.com")
-    console.log(profile)
-  done(null, user)
+    const user = await getOrCreateUser(profile.emails[0].value)
+    done(null, user)
 }))
 
 passport.use(new LocalStrategy(async (email, password, done) => {
@@ -54,9 +50,10 @@ passport.deserializeUser(async (email, done) => {
 })
 
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
-router.get('/google/callback', passport.authenticate('google', {failureRedirect: '/login'}), (req, res) => {
-    res.redirect("/");
-})
+router.get('/google/callback', passport.authenticate('google', {successRedirect: '/', failureRedirect: '/login'}))
+// , (req, res) => {
+//     res.redirect("/");
+// })
 
 router.get('/facebook', passport.authenticate('facebook', {scope: ['email']}))
 router.get('/facebook/callback', passport.authenticate('facebook', {successRedirect: '/', failureRedirect: '/login'}))
@@ -83,17 +80,18 @@ router.post('/register', async (req, res) => {
   passport.authenticate('local', {successRedirect: '/', failureRedirect: '/login'})(req, res)
 })
 
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-}
-
 router.get('/check', (req, res) => {
      return res.json({
         authenticated: req.isAuthenticated(),
     })
 })
 
-const getOrCreate = async (email) => {
+router.get('/logout', (req, res) => {
+    req.logout()
+    res.redirect('/')
+})
+
+const getOrCreateUser = async (email) => {
     let user = await User.findOne({email})
     if (!user) {
         user = await User.create({email})
@@ -101,9 +99,8 @@ const getOrCreate = async (email) => {
     return user
 }
 
-router.get('/logout', (req, res) => {
-    req.logout()
-    res.redirect('/')
-})
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
 
 module.exports = router
