@@ -1,4 +1,3 @@
-import Header from './Components/Header'
 import MainPage from './Components/MainPage';
 import BooksPage from './Components/BooksPage';
 import BookDetails from './Components/BookDetails';
@@ -7,11 +6,11 @@ import {Route, Routes} from 'react-router-dom';
 import AuthorDetails from './Components/AuthorDetails';
 import PrivateRoute from './Components/PrivateRoute';
 import LoginPage from './Components/LoginPage';
+import './App.css'
 
 function App() {
   return (
     <div className="App">
-        <Header/>
         <Routes>
           <Route path="/" exact element={<MainPage/>}/>
           <Route path="/login" exact element={<LoginPage/>}/>

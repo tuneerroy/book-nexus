@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Navigate } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate, NavLink } from 'react-router-dom';
+import { AppBar, CircularProgress, Toolbar, Typography, Button } from '@mui/material';
 
 const PrivateRoute = ({Component, ...props}) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // if (process.env.NODE_ENV === 'development') {
-        //     setIsAuthenticated(true);
-        //     setIsLoading(false);
-        //     return;
-        // }
         fetch('/api/auth/check')
             .then(res => res.json())
             .then(data => {
-                setIsAuthenticated(data.authenticated);
-                setIsLoading(false);
+                if (!data.authenticated) {
+                    navigate('/login', { replace: true });
+                } else {
+                    setIsLoading(false);
+                }
             })
             .catch(err => console.log(err))
     }, []);
+
+    const handleLogout = () => {
+        fetch('/api/auth/logout')
+        .then(res => window.location.href = res.url)
+        .catch(err => console.log(err))
+    }
 
     if (isLoading) {
         return (
@@ -28,7 +32,23 @@ const PrivateRoute = ({Component, ...props}) => {
             </div>
         )
     }
-    return isAuthenticated ?  <Component {...props} /> : <Navigate to='/login' />
+    
+    return (
+        <>
+          <AppBar position="relative">
+            <Toolbar>
+              <Typography variant="h5" sx={{ flexGrow: 1 }}>
+                <NavLink to={`/`} className="title">Book Nexus</NavLink>
+              </Typography>
+              <Button color="inherit" onClick={handleLogout}>
+                Logout
+              </Button>
+            </Toolbar>
+          </AppBar>
+          <Toolbar />
+          <Component {...props} />
+        </>
+    )
 };
 
 export default PrivateRoute;
