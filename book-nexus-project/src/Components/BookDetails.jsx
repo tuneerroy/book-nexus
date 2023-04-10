@@ -63,11 +63,11 @@ function Book() {
       </div>
       <div className='px-20'>
         <h2 className='text-2xl font-semibold my-5'>Books by the same author</h2>
-        <BookRow getBooks={() => getBooks({'categories': ['Cooking'], 'rating_low': 3.0})}/>
+        <BookRow getBooks={() => getBooks({categories: ['Cooking'], rating_low: 3.0, pageSize: 7, page: 1})}/>
       </div>
       <div className='px-20'>
         <h2 className='text-2xl font-semibold my-5'>Books by the same author</h2>
-        <BookRow getBooks={() => getBooks({'categories': ['History'], 'rating_low': 3.0})}/>
+        <BookRow getBooks={() => getBooks({categories: ['History'], rating_low: 3.0, pageSize: 7, page: 1})}/>
       </div>
     </div>
   )
