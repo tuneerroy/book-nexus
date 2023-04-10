@@ -7,11 +7,11 @@ const PrivateRoute = ({Component, ...props}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        if (process.env.NODE_ENV === 'development') {
-            setIsAuthenticated(true);
-            setIsLoading(false);
-            return;
-        }
+        // if (process.env.NODE_ENV === 'development') {
+        //     setIsAuthenticated(true);
+        //     setIsLoading(false);
+        //     return;
+        // }
         fetch('/api/auth/check')
             .then(res => res.json())
             .then(data => {

@@ -65,7 +65,6 @@ const LoginPage = () => {
               onChange={e => setPassword(e.target.value)}
             />
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               color="primary"
@@ -74,7 +73,6 @@ const LoginPage = () => {
               Sign In
             </Button>
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               color="warning"
