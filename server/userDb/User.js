@@ -18,7 +18,7 @@ userSchema.pre('save', async function(next) {
 
 userSchema.statics.checkPassword = async function(email, password) {
   const user = await this.findOne({email})
-  return user && user.password && await bcrypt.compare(password, user.password)
+  return user?.password && await bcrypt.compare(password, user.password)
 }
 
 userSchema.statics.getOrCreate = async function(email) {
