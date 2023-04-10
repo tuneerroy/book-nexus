@@ -9,12 +9,6 @@ const morgan = require('morgan')
 const passport = require('passport')
 const session = require('express-session')
 
-const accountsRouter = require('./routes/accounts')
-const favoriteRouter = require('./routes/favorites')
-const bookRouter = require('./routes/books')
-const authorRouter = require('./routes/authors')
-const auth = require('./auth/middleware')
-
 const app = express()
 app.use(morgan('dev'))
 app.use(express.json())
@@ -27,6 +21,12 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+
+const accountsRouter = require('./routes/accounts')
+const favoriteRouter = require('./routes/favorites')
+const bookRouter = require('./routes/books')
+const authorRouter = require('./routes/authors')
+const auth = require('./auth/middleware')
 
 app.use('/api/authors', authorRouter)
 app.use('/api/auth', accountsRouter)

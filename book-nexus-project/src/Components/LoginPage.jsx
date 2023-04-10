@@ -24,28 +24,35 @@ const LoginPage = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        email,
+        username: email,
         password
       })
     })
-      .then(res => res.follow())
+      .then(res => {
+        console.log(res.url)
+        console.log("here")
+        window.location.href = res.url
+      })
       .catch(err => {
         console.log(err);
-        setError(err);
+        // setError(err);
       })
   }
 
   const handleGoogleLogin = () => fetch('/api/auth/google')
-      .then(res => res.follow())
+      .then(res => {
+        console.log(res.url)
+        window.location.href = res.url
+      })
       .catch(err => {
         console.log(err);
-        setError(err);
+        // setError(err);
       })
   const handleFacebookLogin = () => fetch('/api/auth/facebook')
-      .then(res => res.follow())
+      .then(res => window.location.href = res.url)
       .catch(err => {
         console.log(err);
-        setError(err);
+        // setError(err);
       })
   
   return (

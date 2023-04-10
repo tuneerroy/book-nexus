@@ -13,6 +13,7 @@ passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: '/auth/google/callback',
+  profileFields: ['email'],
 }, async (_accessToken, _refreshToken, profile, done) => {
   const user = await User.getOrCreate({email: profile.emails[0].value})
   done(null, user)
@@ -57,7 +58,8 @@ router.get('/facebook/callback', passport.authenticate('facebook', {successRedir
 router.post('/login', passport.authenticate('local', {successRedirect: '/', failureRedirect: '/login'}))
 
 router.post('/register', async (req, res) => {
-  const {email, password} = req.body
+  const {username, password} = req.body
+  const email = username
   if (!email || !password) {
     return res.status(400).json({error: 'Missing email or password'})
   }
@@ -72,8 +74,7 @@ router.post('/register', async (req, res) => {
   }
 
   await User.create({email, password})
-  req.session.email = email
-  res.redirect('/')
+  passport.authenticate('local', {successRedirect: '/', failureRedirect: '/login'})(req, res)
 })
 
 function isValidEmail(email) {
@@ -81,9 +82,9 @@ function isValidEmail(email) {
 }
 
 router.get('/check', (req, res) => {
-  return res.json({
-    authenticated: req.isAuthenticated(),
-  })
+     return res.json({
+        authenticated: req.isAuthenticated(),
+    })
 })
 
 module.exports = router
