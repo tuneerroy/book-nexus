@@ -50,12 +50,10 @@ router.get('/', (req, res) => {
     }
     results.forEach((result) => {
       result.categories = result.categories && result.categories.split(';')
-      result.authors =
-        result.authors &&
-        result.authors.split(';').map((author) => {
-          const [id, name] = author.split('|')
-          return {id, name}
-        })
+      result.authors = result.authors && result.authors.split(';').map((author) => {
+        const [id, name] = author.split('|')
+        return {id, name}
+      })
     })
     res.json(results)
   })

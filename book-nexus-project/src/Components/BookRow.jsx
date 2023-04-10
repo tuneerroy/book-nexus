@@ -23,7 +23,7 @@ function BookRow({getBooks}) {
   console.log(books)
   return (
     <div className='flex flex-row w-full space-x-2 md:space-x-6'>
-      {books.slice(0, 7).map(book => (
+      {books.map(book => (
         <div key={book.isbn} className='w-[14.2857%] flex flex-col'>
           <NavLink to={`/books/${book.isbn}`}>
             <img className='w-full h-[15vw] object-cover rounded-lg' src={book.image_link} alt='book'/>
