@@ -12,7 +12,7 @@ const router = express.Router()
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'https://book-nexus.herokuapp.com/auth/google/callback',
+  callbackURL: 'https://book-nexus.herokuapp.com/api/auth/google/callback',
   profileFields: ['email'],
 }, async (_accessToken, _refreshToken, profile, done) => {
   const user = await User.getOrCreate({email: profile.emails[0].value})
@@ -22,7 +22,7 @@ passport.use(new GoogleStrategy({
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: 'https://book-nexus.herokuapp.com/auth/facebook/callback',
+  callbackURL: 'https://book-nexus.herokuapp.com/api/auth/facebook/callback',
   profileFields: ['email'],
 }, async (_accessToken, _refreshToken, profile, done) => {
   const user = await User.getOrCreate({email: profile.emails[0].value})
