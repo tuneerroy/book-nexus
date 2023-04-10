@@ -77,13 +77,13 @@ router.post('/register', async (req, res) => {
 })
 
 function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
 router.get('/check', (req, res) => {
-     return res.json({
-        authenticated: req.isAuthenticated(),
-    })
+  return res.json({
+    authenticated: req.isAuthenticated(),
+  })
 })
 
 module.exports = router

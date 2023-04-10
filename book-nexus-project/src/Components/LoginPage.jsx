@@ -27,14 +27,26 @@ const LoginPage = () => {
         email,
         password
       })
-    }).catch(err => {
-      console.log(err);
-      setError(err);
     })
+      .then(res => res.follow())
+      .catch(err => {
+        console.log(err);
+        setError(err);
+      })
   }
 
   const handleGoogleLogin = () => fetch('/api/auth/google')
+      .then(res => res.follow())
+      .catch(err => {
+        console.log(err);
+        setError(err);
+      })
   const handleFacebookLogin = () => fetch('/api/auth/facebook')
+      .then(res => res.follow())
+      .catch(err => {
+        console.log(err);
+        setError(err);
+      })
   
   return (
     <>
