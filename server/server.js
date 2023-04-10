@@ -8,9 +8,11 @@ const express = require('express')
 const morgan = require('morgan')
 const passport = require('passport')
 const session = require('express-session')
+const cors = require('cors')
 
 const app = express()
 app.use(morgan('dev'))
+app.use(cors());
 app.use(express.json())
 app.use(require('cookie-parser')())
 app.use(require('body-parser').urlencoded({extended: true}))
