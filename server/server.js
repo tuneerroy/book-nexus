@@ -9,11 +9,6 @@ const morgan = require('morgan')
 const passport = require('passport')
 const session = require('express-session')
 
-const accountsRouter = require('./routes/accounts')
-const favoriteRouter = require('./routes/favorites')
-const bookRouter = require('./routes/books')
-const auth = require('./auth/middleware')
-
 const accountsRouter = require('./routes/accounts');
 const favoriteRouter = require('./routes/favorites');
 const bookRouter = require('./routes/books');
