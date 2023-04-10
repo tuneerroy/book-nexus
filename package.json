@@ -2,9 +2,9 @@
   "name": "server",
   "version": "1.0.0",
   "private": true,
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
-    "start": "node server/server.js",
+    "start": "node .",
     "test": "jest --detectOpenHandles --coverage"
   },
   "dependencies": {
