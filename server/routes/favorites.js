@@ -1,15 +1,15 @@
 const express = require('express')
-const Users = require('../userDb/User')
+const User = require('../userDb/User')
 
 const router = express.Router()
 
 router.get('/books', async (req, res) => {
-  const user = await Users.findById(req.body.userId)
+  const user = await User.findOne({email: req.user.email})
   res.json({books: user.books})
 })
 
 router.post('/books', async (req, res) => {
-  const user = await Users.findById(req.body.userId)
+  const user = await User.findOne({email: req.user.email})
   if (!user.books.includes(req.body.book)) {
     user.books.push(req.body.book)
     await user.save()
@@ -18,7 +18,7 @@ router.post('/books', async (req, res) => {
 })
 
 router.delete('/books', async (req, res) => {
-  const user = await Users.findById(req.body.userId)
+  const user = await User.findOne({email: req.user.email})
   if (user.books.includes(req.body.book)) {
     user.books = user.books.filter((book) => book !== req.body.book)
     await user.save()
@@ -27,12 +27,12 @@ router.delete('/books', async (req, res) => {
 })
 
 router.get('/authors', async (req, res) => {
-  const user = await Users.findById(req.body.userId)
-  res.json({authors: user.authors})
+  const user = await User.findOne({email: req.user.email})
+    res.json({authors: user.authors})
 })
 
 router.post('/authors', async (req, res) => {
-  const user = await Users.findById(req.body.userId)
+  const user = await User.findOne({email: req.user.email})
   if (!user.authors.includes(req.body.author)) {
     user.authors.push(req.body.author)
     await user.save()
@@ -41,7 +41,7 @@ router.post('/authors', async (req, res) => {
 })
 
 router.delete('/authors', async (req, res) => {
-  const user = await Users.findById(req.body.userId)
+  const user = await User.findOne({email: req.user.email})
   if (user.authors.includes(req.body.author)) {
     user.authors = user.authors.filter((author) => author !== req.body.author)
     await user.save()
