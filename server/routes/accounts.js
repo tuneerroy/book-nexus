@@ -49,7 +49,7 @@ passport.deserializeUser(async (email, done) => {
   done(null, user)
 })
 
-router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
+router.get('/google', passport.authenticate('google', {scope: ['email']}))
 router.get('/google/callback', passport.authenticate('google', {successRedirect: '/', failureRedirect: '/login'}))
 
 router.get('/facebook', passport.authenticate('facebook', {scope: ['email']}))

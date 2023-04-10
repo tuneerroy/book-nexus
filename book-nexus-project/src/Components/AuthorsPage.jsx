@@ -10,6 +10,14 @@ function AuthorsPage() {
 
     //TODO
     useEffect(() => {
+        fetch('/api/favorites/books')
+            .then(res => res.json())
+            .then(data => {
+                console.log("Received response from /api/favorites/books")
+                console.log(data)
+            })
+            return
+
         fetch('/api/authors')
             .then(res => res.json())
             .then(data => {

@@ -10,6 +10,7 @@ const PrivateRoute = ({Component, ...props}) => {
         fetch('/api/auth/check')
             .then(res => res.json())
             .then(data => {
+                // data.authenticated = true
                 if (!data.authenticated) {
                     navigate('/login', { replace: true });
                 } else {
