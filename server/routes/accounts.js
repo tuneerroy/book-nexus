@@ -50,7 +50,10 @@ passport.deserializeUser(async (email, done) => {
 })
 
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
-router.get('/google/callback', passport.authenticate('google', {successRedirect: '/', failureRedirect: '/login'}))
+router.get('/google/callback', passport.authenticate('google', {failureRedirect: '/login'},
+  (req, res) => {
+    res.redirect("/");
+  }))
 
 router.get('/facebook', passport.authenticate('facebook', {scope: ['email']}))
 router.get('/facebook/callback', passport.authenticate('facebook', {successRedirect: '/', failureRedirect: '/login'}))
