@@ -12,10 +12,14 @@ userSchema.pre('save', async function(next) {
   if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10)
     this.password = bcrypt.hash(this.password, salt)
-    await this.save()
   }
   return next()
 })
+
+userSchema.statics.checkPassword = async function(email, password) {
+  const user = await this.findOne({email})
+  return user && await bcrypt.compare(password, user.password)
+}
 
 userSchema.statics.getOrCreate = async function(email) {
   const user = await this.findOne({email})

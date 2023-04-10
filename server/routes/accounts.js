@@ -1,43 +1,89 @@
 const express = require('express')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const passport = require('passport')
 
-const Users = require('../userDb/users')
+const GoogleStrategy = require('passport-google-oauth20').Strategy
+const FacebookStrategy = require('passport-facebook').Strategy
+const LocalStrategy = require('passport-local').Strategy
+
+const User = require('../userDb/User')
 
 const router = express.Router()
 
-router.post('/login', async (req, res) => {
-  const {username, password} = req.body
-  if (!username || !password) {
-    return res.status(400).json({error: 'Missing username or password'})
-  }
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: '/auth/google/callback',
+}, async (_accessToken, _refreshToken, profile, done) => {
+  const user = await User.getOrCreate({email: profile.emails[0].value})
+  done(null, user)
+}))
 
-  const user = await Users.findOne({username})
+passport.use(new FacebookStrategy({
+  clientID: process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_APP_SECRET,
+  callbackURL: '/auth/facebook/callback',
+  profileFields: ['email'],
+}, async (_accessToken, _refreshToken, profile, done) => {
+  const user = await User.getOrCreate({email: profile.emails[0].value})
+  done(null, user)
+}))
+
+passport.use(new LocalStrategy(async (email, password, done) => {
+  const user = await User.findOne({email})
   if (!user) {
-    return res.status(401).json({error: 'User not found'})
+    return done(null, false, {message: 'Incorrect email.'})
   }
+  if (!(await User.checkPassword(email, password))) {
+    return done(null, false, {message: 'Incorrect password.'})
+  }
+  done(null, user)
+}))
 
-  if (!(await bcrypt.compare(password, user.password))) {
-    return res.status(401).json({error: 'Invalid credentials'})
-  }
-  const token = createToken(user)
-  res.json({token})
+passport.serializeUser((user, done) => {
+  done(null, user.email)
 })
+
+passport.deserializeUser(async (email, done) => {
+  const user = await User.findOne({email})
+  done(null, user)
+})
+
+router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
+router.get('/google/callback', passport.authenticate('google', {successRedirect: '/', failureRedirect: '/login'}))
+
+router.get('/facebook', passport.authenticate('facebook', {scope: ['email']}))
+router.get('/facebook/callback', passport.authenticate('facebook', {successRedirect: '/', failureRedirect: '/login'}))
+
+router.post('/login', passport.authenticate('local', {successRedirect: '/', failureRedirect: '/login'}))
 
 router.post('/register', async (req, res) => {
-  const {username, password} = req.body
-  if (!username || !password) {
-    return res.status(400).json({error: 'Missing username or password'})
+  const {email, password} = req.body
+  if (!email || !password) {
+    return res.status(400).json({error: 'Missing email or password'})
   }
-  const user = await Users.createAccount(username, password)
-  const token = createToken(user)
-  res.json({token})
+
+  const userExists = await User.findOne({email})
+  if (userExists) {
+    return res.status(400).json({error: 'User already exists'})
+  }
+
+  if (!isValidEmail(email)) {
+    return res.status(400).json({error: 'Invalid email'})
+  }
+
+  await User.create({email, password})
+  req.session.email = email
+  res.redirect('/')
 })
 
-const createToken = (user) => {
-  return jwt.sign({userId: user._id}, process.env.JWT_TOKEN, {
-    expiresIn: '1h',
-  })
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
+
+router.get('/check', (req, res) => {
+     return res.json({
+        authenticated: req.isAuthenticated(),
+    })
+})
 
 module.exports = router
