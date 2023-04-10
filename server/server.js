@@ -10,6 +10,7 @@ const session = require('express-session');
 const accountsRouter = require('./routes/accounts');
 const favoriteRouter = require('./routes/favorites');
 const bookRouter = require('./routes/books');
+const authorRouter = require('./routes/authors');
 const auth = require('./auth/middleware');
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(session({
 app.use('/api/auth', accountsRouter);
 app.use('/api/favorites', favoriteRouter);
 app.use('/api/books', bookRouter);
+app.use('/api/authors', authorRouter);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', (req, res) => {
