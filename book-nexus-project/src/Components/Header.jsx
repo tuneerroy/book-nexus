@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../App.css'
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 function Header() {
     return (
