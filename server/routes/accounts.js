@@ -51,9 +51,6 @@ passport.deserializeUser(async (email, done) => {
 
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
 router.get('/google/callback', passport.authenticate('google', {successRedirect: '/', failureRedirect: '/login'}))
-// , (req, res) => {
-//     res.redirect("/");
-// })
 
 router.get('/facebook', passport.authenticate('facebook', {scope: ['email']}))
 router.get('/facebook/callback', passport.authenticate('facebook', {successRedirect: '/', failureRedirect: '/login'}))
@@ -69,14 +66,19 @@ router.post('/register', async (req, res) => {
 
   const userExists = await User.findOne({email})
   if (userExists) {
-    return res.status(400).json({error: 'User already exists'})
+    if (userExists.password) {
+        return res.status(400).json({error: 'User already has account'})
+    } else {
+        userExists.password = password
+        await userExists.save()
+    }
+  } else {
+    if (!isValidEmail(email)) {
+        return res.status(400).json({error: 'Invalid email'})
+    }
+    await User.create({email, password})
   }
 
-  if (!isValidEmail(email)) {
-    return res.status(400).json({error: 'Invalid email'})
-  }
-
-  await User.create({email, password})
   passport.authenticate('local', {successRedirect: '/', failureRedirect: '/login'})(req, res)
 })
 
