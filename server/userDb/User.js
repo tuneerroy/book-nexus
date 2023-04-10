@@ -22,10 +22,9 @@ userSchema.statics.checkPassword = async function(email, password) {
 }
 
 userSchema.statics.getOrCreate = async function(email) {
-  const user = await this.findOne({email})
+  let user = await this.findOne({email})
   if (!user) {
     user = await this.create({email})
-    user.save()
   }
   return user
 }
