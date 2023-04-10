@@ -30,8 +30,8 @@ const bookRouter = require('./routes/books')
 const authorRouter = require('./routes/authors')
 const auth = require('./auth')
 
+app.use('/api/auth', accountsRouter)
 app.use('/api/authors', auth, authorRouter)
-app.use('/api/auth', auth, accountsRouter)
 app.use('/api/favorites', auth, favoriteRouter)
 app.use('/api/books', auth, bookRouter)
 
