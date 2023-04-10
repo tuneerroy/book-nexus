@@ -29,38 +29,15 @@ const LoginPage = () => {
       })
     })
       .then(res => {
-        console.log(res.url)
-        console.log("here")
         window.location.href = res.url
       })
       .catch(err => {
         console.log(err);
-        // setError(err);
       })
   }
 
-  // const handleGoogleLogin = () => fetch('/api/auth/google', {
-  //     method: 'GET',
-  //     mode: 'no-cors',
-  //   })
-  //     .then(res => {
-  //       console.log(res.url)
-  //       window.location.href = res.url
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //       // setError(err);
-  //     })
   const handleGoogleLogin = () => window.location.href = '/api/auth/google'
-  const handleFacebookLogin = () => fetch('/api/auth/facebook', {
-      method: 'GET',
-      mode: 'no-cors',
-    })
-      .then(res => window.location.href = res.url)
-      .catch(err => {
-        console.log(err);
-        // setError(err);
-      })
+  const handleFacebookLogin = () => window.location.href = '/api/auth/facebook'
   
   return (
     <>
