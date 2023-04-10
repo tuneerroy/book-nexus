@@ -89,8 +89,12 @@ router.get('/check', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-    req.logout()
-    res.redirect('/')
+    req.logout((err) => {
+        if (err) {
+            console.error(err)
+        }
+        res.redirect('/')
+    })
 })
 
 const getOrCreateUser = async (email) => {
