@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import Book from './Book'
 import { NavLink } from 'react-router-dom'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-function BookRow({getBooks}) {
-  const [books, setBooks] = useState([])
-  useEffect(() => {
-    getBooks().then(setBooks)
-  }, [])
-
+function BookRow({books}) {
   const shorten = (str) => {
     if (str.length > 36) return str.slice(0, 36) + '...'
     return str
   }
 
   const formatAuthor = (authors) => {
-    if (authors === undefined || authors.length === 0) return 'No Authors'
+    if (authors === undefined || authors === null || authors.length === 0) return <span className='italic'>No Authors</span>
     if (authors.length > 1) return <><NavLink to={`/authors/${authors[0].id}`}>{authors[0].name}</NavLink>...</>
     return <NavLink to={`/authors/${authors[0].id}`}>{authors[0].name}</NavLink>
   }
-  console.log(books)
+
+  const formatGenre = (genres) => {
+    if (genres === undefined || genres === null || genres.length === 0) return <span className='italic'>No Genres</span>
+    if (genres.length > 1) return <><span className='font-medium'>{genres[0]}</span>...</>
+    return <span className='font-medium'>{genres[0]}</span>
+  }
+
   return (
     <div className='flex flex-row w-full space-x-2 md:space-x-6'>
       {books.map(book => (
@@ -43,9 +43,10 @@ function BookRow({getBooks}) {
             />
           </div>
           <NavLink to={`/books/${book.isbn}`}>
-            <div className='text-xs font-medium'>{shorten(book.title)}</div>
+            <div className='text-xs font-bold'>{shorten(book.title)}</div>
           </NavLink>
           <div className='text-xs'>{formatAuthor(book.authors)}</div>
+          <div className='text-xs'>{formatGenre(book.categories)}</div>
         </div>
       ))}
     </div>

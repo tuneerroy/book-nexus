@@ -5,7 +5,6 @@ export const getBooks = async ({categories, authors, year_low, year_high, rating
     const response = await axios.get(`/api/books`, {
       params: { categories, authors, year_low, year_high, rating_low, rating_high, pageSize, page }
     });
-    console.log(response.data);
     return response.data;
   }
   catch (error) {

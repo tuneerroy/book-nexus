@@ -12,7 +12,7 @@ const fColInRange = (col, low, high) => {
 
 const fGetPage = (page, pageSize) => {
   if (page === undefined || pageSize === undefined) return ''
-  return `LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`
+  return `LIMIT ${pageSize} OFFSET ${(Math.max(page - 1, 0)) * pageSize}`
 }
 
 module.exports = {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { NavLink, useParams } from 'react-router-dom';
 import { getAuthor, getBooks } from '../api';
 import BookRow from './BookRow';
+import Shelf from './Shelf';
 
 const authors = [
   { id: 1, name: 'J.K. Rowling' },
@@ -28,10 +29,7 @@ function AuthorDetails() {
           ))}
         </div>
       </div>
-      <div>
-        <h2 className='text-2xl font-semibold my-5'>Top Books by {authorName}</h2>
-        <BookRow getBooks={() => getBooks({categories: ['Fiction'], rating_high: 3.0, pageSize: 7, page: 1})}/>
-      </div>
+      <Shelf title={`Top books by ${authorName}`} getBooks={getBooks} params={{authors: [authorName]}}/>
     </div>
   )
 }

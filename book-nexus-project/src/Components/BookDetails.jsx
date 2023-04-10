@@ -5,6 +5,7 @@ import { getBook, getBooks } from '../api';
 import BookRow from './BookRow';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import Shelf from './Shelf';
 
 function Book() {
   const {id: isbn} = useParams();
@@ -23,9 +24,11 @@ function Book() {
   const {title, year, description, image_link, categories, authors, rating, num_reviews} = book;
 
   return (
-    <div className='py-5 space-y-8'>
-      <div className='flex flex-col md:flex-row px-20 md:space-x-16'>
-        <img className='min-w-[160px] w-1/5 h-auto rounded-lg' src={image_link} alt={title} onLoad={handleImageLoad}/>
+    <div className='py-5 space-y-8 px-20'>
+      <div className='flex flex-col md:flex-row md:space-x-16'>
+        <div className='w-1/5 flex items-center'>
+          <img className='min-w-[160px] w-full rounded-lg' src={image_link} alt={title} onLoad={handleImageLoad}/>
+        </div>
         <div className='w-4/5 flex flex-col justify-center'>
           <h2 className='text-4xl font-bold'>{title}</h2>
           <div>{year} • {categories ? categories.join(', ') : <span className='italic'>No Categories</span>}</div>
@@ -61,14 +64,8 @@ function Book() {
           </div>
         </div>
       </div>
-      <div className='px-20'>
-        <h2 className='text-2xl font-semibold my-5'>Books by the same author</h2>
-        <BookRow getBooks={() => getBooks({categories: ['Cooking'], rating_low: 3.0, pageSize: 7, page: 1})}/>
-      </div>
-      <div className='px-20'>
-        <h2 className='text-2xl font-semibold my-5'>Books by the same author</h2>
-        <BookRow getBooks={() => getBooks({categories: ['History'], rating_low: 3.0, pageSize: 7, page: 1})}/>
-      </div>
+      <Shelf title={"Books by the same author"} getBooks={getBooks} params={{authors: authors ? authors.map(author => author.name) : ['']}}/>
+      <Shelf title={"Books of the same genre"} getBooks={getBooks} params={{categories: categories ? categories : ['']}}/>
     </div>
   )
 }
