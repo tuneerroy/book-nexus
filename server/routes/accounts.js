@@ -15,7 +15,9 @@ passport.use(new GoogleStrategy({
   callbackURL: 'https://book-nexus.herokuapp.com/api/auth/google/callback',
   profileFields: ['email'],
 }, async (_accessToken, _refreshToken, profile, done) => {
-  const user = await User.getOrCreate({email: profile.emails[0].value})
+    console.error(profile)
+    const user = await User.getOrCreate({email: "test@test.com"})
+//   const user = await User.getOrCreate({email: profile.emails[0].value})
   done(null, user)
 }))
 
@@ -25,7 +27,9 @@ passport.use(new FacebookStrategy({
   callbackURL: 'https://book-nexus.herokuapp.com/api/auth/facebook/callback',
   profileFields: ['email'],
 }, async (_accessToken, _refreshToken, profile, done) => {
-  const user = await User.getOrCreate({email: profile.emails[0].value})
+//   const user = await User.getOrCreate({email: profile.emails[0].value})
+console.log(profile)
+const user = await User.getOrCreate({email: "test@test.com"})
   done(null, user)
 }))
 
