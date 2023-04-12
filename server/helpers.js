@@ -15,8 +15,11 @@ const fGetPage = (page, pageSize) => {
   return `LIMIT ${pageSize} OFFSET ${(Math.max(page - 1, 0)) * pageSize}`
 }
 
+const fListToTable = (arr) => 'VALUES ' + arr.map((item) => `ROW("${item}")`).join(", ")
+
 module.exports = {
   fColInList,
   fColInRange,
   fGetPage,
+  fListToTable
 }

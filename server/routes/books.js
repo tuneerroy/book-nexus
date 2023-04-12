@@ -86,7 +86,7 @@ router.get('/:isbn', (req, res) => {
         const [id, name] = author.split('|')
         return {id, name}
       })
-    console.log(results[0])
+    //console.log(results[0])
     res.json(results[0])
   })
 })
@@ -120,6 +120,80 @@ router.get('/recommendations/category', (req, res) => {
     })
     res.json(results)
   })
+})
+
+//route for books that match a given set of keywords (for search functionality)
+router.get('/search/search', (req, res) => {
+  const keywords = req.query.keywords.split(/\W+/)
+  const query = `
+  WITH
+    Keywords(keyword) AS (
+      ${helpers.fListToTable(keywords)}
+    ),
+  
+    TitleMatches AS (
+      SELECT isbn, COUNT(*) AS matches
+      FROM Book B, Keywords K
+      WHERE B.title LIKE CONCAT('%', K.keyword,'%')
+      GROUP BY isbn
+    ),
+  
+    DescriptionMatches AS (
+      SELECT isbn, COUNT(*) AS matches
+      FROM Book B, Keywords K
+      WHERE B.description LIKE CONCAT('%', K.keyword,'%')
+      GROUP BY isbn
+    ),
+  
+    MatchesPerReview AS (
+        SELECT isbn, (matches / num) AS matchesPerReview
+        FROM(
+          (SELECT isbn, COUNT(*) AS matches
+            FROM Review R NATURAL JOIN Book B,
+                Keywords K
+            WHERE B.title LIKE CONCAT('%', K.keyword,'%')
+            GROUP BY isbn
+          ) ReviewMatch
+          NATURAL JOIN (SELECT isbn, COUNT(*) AS num
+            FROM Review
+            GROUP BY isbn) ReviewCount
+          )
+    ),
+  
+    TotalPriority AS (
+      SELECT T.isbn,
+              T.matches
+                  + COALESCE(R.matchesPerReview, 0)
+                  + COALESCE(D.matches, 0) AS Priority
+      FROM Book B
+      LEFT JOIN TitleMatches T
+      ON B.isbn = T.isbn
+      LEFT JOIN MatchesPerReview R
+      ON B.isbn = R.isbn
+      LEFT JOIN DescriptionMatches D
+      ON B.isbn = D.isbn
+    )
+
+    SELECT *
+    FROM Book B NATURAL JOIN
+      (SELECT *
+      FROM TotalPriority
+      ) P
+    ORDER BY priority DESC
+  `
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).send('DB Error')
+    }
+    // results.forEach((result) => {
+    //   result.categories = result.categories.split(';')
+    //   result.authors = result.authors.split(';')
+    // })
+    res.json(results)
+  })
+
 })
 
 // route for recommendations based off of similar authors to a list of books
