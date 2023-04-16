@@ -1,5 +1,5 @@
 const fColInList = (col, list) => {
-  if (list === undefined || list.length === 0) return 'TRUE'
+  if (list === undefined || list.length === 0) return 'FALSE'
   return `${col} IN (${list.map((item) => `'${item}'`).join(', ')})`
 }
 
