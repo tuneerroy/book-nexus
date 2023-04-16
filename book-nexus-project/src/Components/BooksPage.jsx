@@ -10,10 +10,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from "@mui/material";
 import { searchBooks } from '../api';
+import  { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
+import { getBooks } from '../api';
 
 function BooksPage() {
 
     const [books, setBooks] = useState([]);
+    // const [page, setPage] = useState(1);
 
     useEffect(() => {
         fetch('/api/books/test')
@@ -23,6 +26,10 @@ function BooksPage() {
             })
             .catch(err => console.log(err))
     }, []);
+
+    // useEffect(() => {
+    //     getBooks({pageSize: 9, page}).then(setBooks)
+    //   }, [getBooks, page])
 
     const theme = createTheme({
         typography: {
@@ -122,6 +129,7 @@ function BooksPage() {
                 ))
             }
             </Grid>
+            {/* <Button onClick={() => setPage(page => page + 1)}>Next Page</Button> */}
         </Box>
     )
 }
