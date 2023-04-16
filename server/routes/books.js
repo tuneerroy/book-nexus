@@ -124,7 +124,7 @@ router.get('/recommendations/category', (req, res) => {
 
 //route for books that match a given set of keywords (for search functionality)
 router.get('/search/search', (req, res) => {
-  const keywords = req.query.keywords.split(/\W+/)
+  const keywords = req.query.keywords
   const query = `
   WITH
     Keywords(keyword) AS (
@@ -187,10 +187,10 @@ router.get('/search/search', (req, res) => {
       console.error(err)
       return res.status(500).send('DB Error')
     }
-    // results.forEach((result) => {
-    //   result.categories = result.categories.split(';')
-    //   result.authors = result.authors.split(';')
-    // })
+    results.forEach((result) => {
+      result.categories = result.categories.split(';')
+      result.authors = result.authors.split(';')
+    })
     res.json(results)
   })
 

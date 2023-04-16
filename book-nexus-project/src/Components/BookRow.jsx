@@ -21,12 +21,18 @@ function BookRow({books}) {
     return <span className='font-medium'>{genres[0]}</span>
   }
 
+  const handleImageLoad = (e) => {
+    if (e.target.naturalWidth === 1 && e.target.naturalHeight === 1) {
+      e.target.src = 'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg';
+    }
+  }
+
   return (
     <div className='flex flex-row w-full space-x-2 md:space-x-6'>
-      {books.map(book => (
+      {!books ? <div/> : books.map(book => (
         <div key={book.isbn} className='w-[14.2857%] flex flex-col'>
           <NavLink to={`/books/${book.isbn}`}>
-            <img className='w-full h-[15vw] object-cover rounded-lg' src={book.image_link} alt='book'/>
+            <img className='w-full h-[15vw] object-cover rounded-lg' src={book.image_link} alt='book' onLoad={handleImageLoad}/>
           </NavLink>
           <div className='h-8 w-8 relative bottom-3 left-1 bg-white rounded-full'>
             <CircularProgressbar value={book.rating} maxValue={5} text={`${Math.round(book.rating * 10) / 10}`} 

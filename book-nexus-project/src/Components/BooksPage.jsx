@@ -9,6 +9,7 @@ import {Accordion, AccordionSummary, AccordionDetails, Typography} from '@mui/ma
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from "@mui/material";
+import { searchBooks } from '../api';
 
 function BooksPage() {
 
@@ -40,7 +41,7 @@ function BooksPage() {
                         </ThemeProvider>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <form>
+                        <form onSubmit={searchBooks}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <ThemeProvider theme={theme}>
@@ -49,6 +50,7 @@ function BooksPage() {
                                                 label="Title"
                                                 variant="standard"
                                                 fullWidth
+                                                name="Title"
                                             />
                                         </Typography>
                                     </ThemeProvider>
@@ -60,6 +62,7 @@ function BooksPage() {
                                                 label="Authors"
                                                 variant="standard"
                                                 fullWidth
+                                                name="Authors"
                                             />
                                         </Typography>
                                     </ThemeProvider>
@@ -71,6 +74,7 @@ function BooksPage() {
                                                 label="Genres"
                                                 variant="standard"
                                                 fullWidth
+                                                name="Genres"
                                             />
                                         </Typography>
                                     </ThemeProvider>
@@ -84,6 +88,7 @@ function BooksPage() {
                                             type="number"
                                             InputProps={{ inputProps: { min: 0 } }}
                                             fullWidth
+                                            name="Year"
                                             />
                                         </Typography>
                                     </ThemeProvider>

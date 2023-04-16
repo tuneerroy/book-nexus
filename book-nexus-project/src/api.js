@@ -34,3 +34,24 @@ export const getAuthor = async (id) => {
     console.log(error);
   }
 }
+
+export const searchBooks = async (e) => {
+  try {
+    e.preventDefault();
+    const title = e.target.Title.value;
+    const authors = e.target.Authors.value.split(",")
+    const genres = e.target.Genres.value.split(",")
+    const year = e.target.Year.value;
+
+    const keywords = [title, ...authors, ...genres, year]
+
+    const response = await axios.get(`/api/books/search/`, {
+      params: {keywords}
+    });
+    console.log(response.data)
+    return response.data;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
