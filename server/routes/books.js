@@ -171,7 +171,7 @@ router.get('/:isbn/reviews', (req, res) => {
   const query = `
     SELECT reviewer_id, rating, review, review_source FROM Review
     WHERE isbn = '${req.params.isbn}' AND review != ''
-    ORDER BY review DESC
+    ORDER BY rating DESC
     ${helpers.fGetPage(req.query.page, req.query.pageSize)}
   `
   db.query(query, (err, results) => {
