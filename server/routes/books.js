@@ -3,6 +3,7 @@ const router = express.Router()
 const db = require('../db')
 const helpers = require('../helpers')
 
+// TODO: remove this eventually
 router.get('/test', (req, res) => {
   const query = `
     SELECT * FROM Book
