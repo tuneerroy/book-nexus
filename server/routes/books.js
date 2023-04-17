@@ -166,6 +166,23 @@ router.get('/:isbn', (req, res) => {
   })
 })
 
+// get book nonempty reviews by isbn
+router.get('/:isbn/reviews', (req, res) => {
+  const query = `
+    SELECT reviewer_id, rating, review, review_source FROM Review
+    WHERE isbn = '${req.params.isbn}' AND review != ''
+    ORDER BY review DESC
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)}
+  `
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).send('DB Error')
+    }
+    res.json(results)
+  })
+})
+
 // route for recommendations based off of list of books (isbns) and categories
 router.get('/recommendations/category', (req, res) => {
   const query = `
