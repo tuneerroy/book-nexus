@@ -3,6 +3,11 @@ const fColInList = (col, list) => {
   return `${col} IN (${list.map((item) => `'${item}'`).join(', ')})`
 }
 
+const fColNotInList = (col, list) => {
+  if (list === undefined || list.length === 0) return 'FALSE'
+  return `${col} NOT IN (${list.map((item) => `'${item}'`).join(', ')})`
+}
+
 const fColInRange = (col, low, high) => {
   if (low === undefined && high === undefined) return 'TRUE'
   if (low === undefined) return `${col} <= ${high}`
@@ -19,6 +24,7 @@ const fListToTable = (arr) => 'VALUES ' + arr.map((item) => `ROW("${item}")`).jo
 
 module.exports = {
   fColInList,
+  fColNotInList,
   fColInRange,
   fGetPage,
   fListToTable

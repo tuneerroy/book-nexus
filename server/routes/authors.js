@@ -66,4 +66,66 @@ router.get('/recommendations/category', (req, res) => {
     })
 })
 
+/*
+Recommends authors using a list of given authors
+params:
+  author_list: comma delimited list of given authors
+*/
+
+router.get('/recommendations/authorList', (req, res) => {
+  const authorList = req.query.authorList.split(',')
+  const query = `
+  WITH
+    AuthorListIsbns AS (
+        SELECT isbn
+        FROM WorkedOn W
+        WHERE ${helpers.fColInList('W.author_id', authorList)}
+    ),
+
+    Collabs AS (
+        SELECT W.author_id, COUNT(*) collab_count
+        FROM AuthorListIsbns I
+        NATURAL JOIN WorkedOn W
+        WHERE ${helpers.fColNotInList('W.author_id', authorList)}
+        GROUP BY W.author_id
+    ),
+
+    GenreMatches AS (
+        SELECT A.id AS author_id, COUNT(DISTINCT C.category) AS genre_matches
+        #Get the categories that the author has worked on
+        FROM (SELECT DISTINCT C.category
+          	FROM CategoryOf C NATURAL JOIN AuthorListIsbns
+     	   ) AuthorListCategories
+        NATURAL JOIN CategoryOf C
+        JOIN WorkedOn W ON C.isbn = W.isbn
+        JOIN Author A ON W.author_id = A.id
+        WHERE ${helpers.fColNotInList('A.id', authorList)}
+        GROUP BY A.id
+    )
+
+    SELECT A.name, A.id, P.priority
+    FROM Author A
+    NATURAL JOIN (
+        SELECT
+            author_id AS id,
+            COALESCE(C.collab_count, 0) +
+            COALESCE(G.genre_matches, 0)
+            AS priority
+        FROM
+        GenreMatches G NATURAL LEFT JOIN Collabs C
+    ) P
+    ORDER BY priority DESC
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)}
+    ;
+  `
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).send('DB Error')
+    }
+    res.json(results)
+  })
+
+})
+
 module.exports = router
