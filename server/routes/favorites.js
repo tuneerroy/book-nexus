@@ -49,4 +49,9 @@ router.delete('/authors', async (req, res) => {
   res.json({authors: user.authors})
 })
 
+router.get('/books/:title', async (req, res) => {
+  const users = await User.find({books: req.params.title})
+  res.json({count: users.length})
+})
+
 module.exports = router
