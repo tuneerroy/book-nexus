@@ -1,4 +1,4 @@
-import MainPage from './Components/MainPage';
+import HomePage from './Components/HomePage';
 import BooksPage from './Components/BooksPage';
 import BookDetails from './Components/BookDetails';
 import AuthorsPage from './Components/AuthorsPage';
@@ -13,9 +13,9 @@ function App() {
   return (
     <div className="App">
         <Routes>
-          <Route path="/" exact element={<LoginPage/>}/>
+          <Route path="/" exact element={<LoginPage />}/>
           <Route path="/home" exact element={
-            <PrivateRoute Component={MainPage}/>
+            <PrivateRoute Component={HomePage}/>
           }/>
           <Route path="/books" exact element={
             <PrivateRoute Component={BooksPage}/>
