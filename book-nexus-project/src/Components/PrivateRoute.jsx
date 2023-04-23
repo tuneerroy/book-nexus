@@ -11,9 +11,9 @@ const PrivateRoute = ({Component, ...props}) => {
             .then(res => res.json())
             .then(data => {
                 if (!data.authenticated) {
-                    navigate('/', { replace: true });
+                  navigate('/', { replace: true });
                 } else {
-                    setIsLoading(false);
+                  setIsLoading(false);
                 }
             })
             .catch(err => console.log(err))
@@ -37,9 +37,15 @@ const PrivateRoute = ({Component, ...props}) => {
         <>
           <AppBar position="relative">
             <Toolbar>
-              <Typography variant="h5" sx={{ flexGrow: 1 }}>
-                <NavLink to={`/`} className="title">Book Nexus</NavLink>
+              <Typography variant="h5" sx={{paddingRight: 10}}>
+                <NavLink to={`/home`} className="title">Book Nexus</NavLink>
               </Typography>
+              <Button color="inherit" component={NavLink} to="/books">
+                Books
+              </Button>
+              <Button color="inherit" component={NavLink} to="/authors">
+                Authors
+              </Button>
               <Button color="inherit" onClick={handleLogout}>
                 Logout
               </Button>
