@@ -17,6 +17,7 @@ const LoginPage = () => {
   const handleRegister = () => submitCredentials('register');
 
   const submitCredentials = path => {
+    setError('')
     if (!email || !password) return;
     fetch(`/api/auth/${path}`, {
       method: 'POST',
@@ -29,10 +30,18 @@ const LoginPage = () => {
       })
     })
       .then(res => {
-        window.location.href = res.url
+        switch (res.status) {
+          case 200:
+            window.location.href = '/home'
+          case 400:
+            return res.json()
+          default:
+            return { message: 'Something went wrong. Please try again.'}
+        }
       })
+      .then(data => setError(data.message))
       .catch(err => {
-        console.log(err);
+        console.error(err);
       })
   }
 
@@ -41,6 +50,9 @@ const LoginPage = () => {
   
   return (
     <>
+      <Typography variant="h3" component="h1" style={{ marginBottom: '1rem', fontWeight: 600 }}>
+        Book Nexus
+      </Typography>
       {error && <Typography color="error">{error}</Typography>}
       <Container maxWidth="xs">
         <div style={{marginTop: 20}}>

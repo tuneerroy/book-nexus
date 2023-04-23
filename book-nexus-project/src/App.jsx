@@ -6,14 +6,17 @@ import {Route, Routes} from 'react-router-dom';
 import AuthorDetails from './Components/AuthorDetails';
 import PrivateRoute from './Components/PrivateRoute';
 import LoginPage from './Components/LoginPage';
+import NotFoundPage from './Components/NotFoundPage';
 import './App.css'
 
 function App() {
   return (
     <div className="App">
         <Routes>
-          <Route path="/" exact element={<MainPage/>}/>
-          <Route path="/login" exact element={<LoginPage/>}/>
+          <Route path="/" exact element={<LoginPage/>}/>
+          <Route path="/home" exact element={
+            <PrivateRoute Component={MainPage}/>
+          }/>
           <Route path="/books" exact element={
             <PrivateRoute Component={BooksPage}/>
           }/>
