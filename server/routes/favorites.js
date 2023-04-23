@@ -3,6 +3,14 @@ const User = require('../userDb/User')
 
 const router = express.Router()
 
+router.get('/', async (req, res) => {
+  const user = await User.findOne({email: req.user.email})
+  res.json({
+    books: user.books,
+    authors: user.authors,    
+  })
+})
+
 router.get('/books', async (req, res) => {
   const user = await User.findOne({email: req.user.email})
   res.json({books: user.books})
