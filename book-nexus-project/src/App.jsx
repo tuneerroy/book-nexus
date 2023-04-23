@@ -26,6 +26,7 @@ function App() {
           <Route path="/authors/:id" exact element={
             <PrivateRoute Component={AuthorDetails}/>
           }/>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
     </div>
   );
