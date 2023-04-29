@@ -16,7 +16,7 @@ import { getBooks } from '../api';
 function BooksPage() {
 
     const [books, setBooks] = useState([]);
-    // const [page, setPage] = useState(1);
+    const [page, setPage] = useState(0);
 
     useEffect(() => {
         fetch('/api/books/test')
@@ -38,6 +38,12 @@ function BooksPage() {
         }
       });
 
+      const searchBooksWrapper = async (e) => {
+        const res = await searchBooks(e);
+        const page_res = res.slice(12*page, 12*(page + 1))
+        setBooks(res);
+      }
+
     return (
         <Box className='bookFeed' sx={{marginBottom: 2, width: '90%', marginX: 'auto'}}>
             <Box sx={{width: '75%', marginX: 'auto'}}>
@@ -48,7 +54,7 @@ function BooksPage() {
                         </ThemeProvider>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <form onSubmit={searchBooks}>
+                        <form onSubmit={searchBooksWrapper}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
                                     <ThemeProvider theme={theme}>
@@ -114,7 +120,7 @@ function BooksPage() {
 
             <Grid container spacing={2} sx={{marginTop: 2}}>
             {
-                books.map(({
+                books && (books.slice(page*12, (page+1)*12)).map(({
                     isbn, title, year, description, image_link
                 }) => (
                     <Grid item xs={4} sx={{display:'flex', justifyContent:'center', py: 5}}> 
@@ -129,7 +135,9 @@ function BooksPage() {
                 ))
             }
             </Grid>
-            {/* <Button onClick={() => setPage(page => page + 1)}>Next Page</Button> */}
+            <Button onClick={() => setPage(page => page == 0 ? 0 : page - 1)}>Previous Page</Button>
+            <Button onClick={() => setPage(page => page + 1)}>Next Page</Button>
+            {page + 1}
         </Box>
     )
 }
