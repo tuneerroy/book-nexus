@@ -1,5 +1,5 @@
 const fColInList = (col, list) => {
-  if (list === undefined || list.length === 0) return 'FALSE'
+  if (list === undefined || list.length === 0) return 'TRUE'
   return `${col} IN (${list.map((item) => `'${item}'`).join(', ')})`
 }
 
@@ -20,12 +20,12 @@ const fGetPage = (page, pageSize) => {
   return `LIMIT ${pageSize} OFFSET ${(Math.max(page - 1, 0)) * pageSize}`
 }
 
-const fListToTable = (arr) => 'VALUES ' + arr.map((item) => `ROW("${item}")`).join(", ")
+const fListToTable = (arr) => 'VALUES ' + arr.map((item) => `ROW("${item}")`).join(', ')
 
 module.exports = {
   fColInList,
   fColNotInList,
   fColInRange,
   fGetPage,
-  fListToTable
+  fListToTable,
 }

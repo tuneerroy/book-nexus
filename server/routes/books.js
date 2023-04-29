@@ -123,6 +123,8 @@ router.get('/search', (req, res) => {
     ORDER BY priority DESC
   `
 
+  console.log(query)
+
   db.query(query, (err, results) => {
     if (err) {
       console.error(err)
@@ -188,20 +190,30 @@ router.get('/:isbn/reviews', (req, res) => {
 // route for recommendations based off of list of books (isbns) and categories
 router.get('/recommendations/category', (req, res) => {
   const query = `
-    WITH GenrePreferences AS (
-          SELECT category, COUNT(*) AS genre_preference
-          FROM CategoryOf
-          WHERE ${helpers.fColInList('isbn', req.query.books)}
-          GROUP BY category
-    ), RecIsbn AS (
-          SELECT isbn, SUM(genre_preference) AS book_preference
-          FROM CategoryOf NATURAL JOIN GenrePreferences
-          GROUP BY isbn
-    )
-    SELECT isbn, title, description, image_link, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories, GROUP_CONCAT(DISTINCT name SEPARATOR ';') AS authors, AVG(rating) AS rating, COUNT(rating) AS test
-    FROM Book NATURAL JOIN RecIsbn NATURAL JOIN CategoryOf NATURAL JOIN WorkedOn JOIN Author ON author_id=id NATURAL JOIN Review
+  WITH GenrePreferences AS (
+    SELECT category, COUNT(*) AS genre_preference
+    FROM CategoryOf
+    WHERE isbn IN ${helpers.fColInList('isbn', req.query.books)}
+    GROUP BY category
+  ), RecIsbn AS (
+      SELECT isbn, SUM(genre_preference) AS book_preference
+      FROM CategoryOf NATURAL LEFT JOIN GenrePreferences
+      GROUP BY isbn
+  ), books_wanted AS (
+    SELECT DISTINCT isbn, title, image_link, book_preference, AVG(rating) AS rating, COUNT(rating) AS num_reviews
+    FROM Book NATURAL JOIN RecIsbn NATURAL LEFT JOIN Review
     GROUP BY isbn
-    ORDER BY book_preference DESC, COUNT(rating) DESC, AVG(rating) DESC
+    ORDER BY book_preference DESC, rating DESC, num_reviews DESC
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)}
+  ), categories_agg AS (
+    SELECT isbn, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories
+    FROM books_wanted NATURAL LEFT JOIN CategoryOf
+    GROUP BY isbn
+  ), authors_agg AS (
+    SELECT isbn, GROUP_CONCAT(DISTINCT CONCAT(author_id, '|', name) SEPARATOR ';') AS authors
+    FROM books_wanted NATURAL LEFT JOIN WorkedOn LEFT JOIN Author ON author_id=id
+    GROUP BY isbn
+  ) SELECT * FROM books_wanted NATURAL LEFT JOIN categories_agg NATURAL LEFT JOIN authors_agg;
   `
   db.query(query, (err, results) => {
     if (err) {
