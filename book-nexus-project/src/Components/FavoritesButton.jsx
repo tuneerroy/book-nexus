@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 
-function FavoritesButton({ purpose, itemId }) {
-  const validPurposes = ['books', 'authors'];
+const validPurposes = ['books', 'authors'];
 
+function FavoritesButton({ purpose, itemId }) {
   if (!validPurposes.includes(purpose)) {
     throw new Error(`Invalid purpose: ${purpose}`);
   }
