@@ -10,8 +10,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme } from "@mui/material";
 import { searchBooks } from '../api';
-import  { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
-import { getBooks } from '../api';
 
 function BooksPage() {
 
@@ -40,7 +38,7 @@ function BooksPage() {
 
       const searchBooksWrapper = async (e) => {
         const res = await searchBooks(e);
-        const page_res = res.slice(12*page, 12*(page + 1))
+        // const page_res = res.slice(12*page, 12*(page + 1))
         setBooks(res);
       }
 
@@ -135,7 +133,7 @@ function BooksPage() {
                 ))
             }
             </Grid>
-            <Button onClick={() => setPage(page => page == 0 ? 0 : page - 1)}>Previous Page</Button>
+            <Button onClick={() => setPage(page => page === 0 ? 0 : page - 1)}>Previous Page</Button>
             <Button onClick={() => setPage(page => page + 1)}>Next Page</Button>
             {page + 1}
         </Box>

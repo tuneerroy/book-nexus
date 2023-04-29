@@ -15,7 +15,7 @@ function Shelf({title, getItems, purpose="books", params}) {
       <h2 className='text-2xl font-semibold my-5'>{title}</h2>
       <div className='flex flex-row w-full min-h-[15vw]'>
         <BsChevronCompactLeft className='text-3xl relative top-[7vw] cursor-pointer' onClick={() => setPage(page => page - 1)}/>
-        {purpose == "books" ? <BookRow books={items} /> : <AuthorRow authors={items} />}
+        {purpose === "books" ? <BookRow books={items} /> : <AuthorRow authors={items} />}
         <BsChevronCompactRight className='text-3xl relative top-[7vw] cursor-pointer' onClick={() => setPage(page => page + 1)}/>
       </div>
     </div>
