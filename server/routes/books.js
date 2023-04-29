@@ -21,27 +21,30 @@ router.get('/test', (req, res) => {
 // get all books with filters
 router.get('/', (req, res) => {
   const query = `
-    SELECT isbn, title, image_link, 
-      GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories, 
-      GROUP_CONCAT(DISTINCT CONCAT(author_id, '|', name) SEPARATOR ';') AS authors, 
-      AVG(rating) AS rating
-    FROM Book NATURAL LEFT JOIN CategoryOf NATURAL LEFT JOIN WorkedOn LEFT JOIN Author ON author_id=id NATURAL LEFT JOIN Review
+  WITH books_wanted AS (
+    SELECT DISTINCT isbn, title, image_link
+    FROM Book NATURAL LEFT JOIN CategoryOf NATURAL LEFT JOIN WorkedOn JOIN Author ON author_id=id
     WHERE ${helpers.fColInList('category', req.query.categories)}
       AND ${helpers.fColInList('name', req.query.authors)}
-      AND ${helpers.fColInRange(
-      'year',
-      req.query.year_low,
-      req.query.year_high,
-  )}
+      AND ${helpers.fColInRange('year', req.query.year_low, req.query.year_high)}
+  ), categories_agg AS (
+    SELECT isbn, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories
+    FROM books_wanted NATURAL LEFT JOIN CategoryOf
     GROUP BY isbn
-      HAVING ${helpers.fColInRange(
-      'AVG(rating)',
-      req.query.rating_low,
-      req.query.rating_high,
-  )}
-    ORDER BY AVG(rating) DESC, COUNT(rating) DESC
-    ${helpers.fGetPage(req.query.page, req.query.pageSize)}
+  ), authors_agg AS (
+    SELECT isbn, GROUP_CONCAT(DISTINCT CONCAT(author_id, '|', name) SEPARATOR ';') AS authors
+    FROM books_wanted NATURAL LEFT JOIN WorkedOn LEFT JOIN Author ON author_id=id
+    GROUP BY isbn
+  ), rating_agg AS (
+    SELECT isbn, AVG(rating) AS rating, COUNT(rating) AS num_reviews
+    FROM books_wanted NATURAL LEFT JOIN Review
+    GROUP BY isbn
+    HAVING ${helpers.fColInRange('rating', req.query.rating_low, req.query.rating_high)}
+  ) SELECT * FROM books_wanted NATURAL LEFT JOIN categories_agg NATURAL LEFT JOIN authors_agg NATURAL LEFT JOIN rating_agg
+  ORDER BY rating DESC, num_reviews DESC
+  ${helpers.fGetPage(req.query.page, req.query.pageSize)}
   `
+
   console.log(query)
 
   db.query(query, (err, results) => {
@@ -60,7 +63,7 @@ router.get('/', (req, res) => {
   })
 })
 
-//route for books that match a given set of keywords (for search functionality)
+// route for books that match a given set of keywords (for search functionality)
 router.get('/search', (req, res) => {
   const keywords = req.query.keywords
   const query = `
@@ -131,7 +134,6 @@ router.get('/search', (req, res) => {
     })
     res.json(results)
   })
-
 })
 
 // const query = `
@@ -161,7 +163,7 @@ router.get('/:isbn', (req, res) => {
         const [id, name] = author.split('|')
         return {id, name}
       })
-    //console.log(results[0])
+    // console.log(results[0])
     res.json(results[0])
   })
 })
