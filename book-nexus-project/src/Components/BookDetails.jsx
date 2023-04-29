@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { getBook, getBooks } from '../api';
-import BookRow from './BookRow';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Shelf from './Shelf';
@@ -66,8 +65,8 @@ function Book() {
         </div>
         <FavoritesButton purpose="books" itemId={isbn}/>
       </div>
-      <Shelf title={"Books by the same author"} getBooks={getBooks} params={{authors: authors ? authors.map(author => author.name) : ['']}}/>
-      <Shelf title={"Books of the same genre"} getBooks={getBooks} params={{categories: categories ? categories : ['']}}/>
+      <Shelf title={"Books by the same author"} getItems={getBooks} params={{authors: authors ? authors.map(author => author.name) : ['']}}/>
+      <Shelf title={"Books of the same genre"} getItems={getBooks} params={{categories: categories ? categories : ['']}}/>
     </div>
   )
 }

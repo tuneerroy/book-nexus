@@ -5,11 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { NavLink } from 'react-router-dom';
 
-function Author(props) {
-    const {
-        id, name
-    } = props;
-
+function Author({id, name}) {
     return (
         <Card sx={{ width: '345px' }}>        
         <CardContent sx={{display: 'flex', justifyContent: 'end', flexDirection: 'column'}}>
