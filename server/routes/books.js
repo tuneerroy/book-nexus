@@ -126,8 +126,8 @@ router.get('/search', (req, res) => {
       return res.status(500).send('DB Error')
     }
     results.forEach((result) => {
-      result.categories = result.categories.split(';')
-      result.authors = result.authors.split(';')
+      result.categories = result.categories && result.categories.split(';')
+      result.authors = result.authors && result.authors.split(';')
     })
     res.json(results)
   })
