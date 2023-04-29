@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink, useParams } from 'react-router-dom';
 import { getAuthor, getBooks } from '../api';
-import BookRow from './BookRow';
 import Shelf from './Shelf';
+import FavoritesButton from './FavoritesButton';
 
 const authors = [
   { id: 1, name: 'J.K. Rowling' },
@@ -28,8 +28,9 @@ function AuthorDetails() {
             <NavLink key={author.id} to={`/authors/${author.id}`} className='text-lg font-medium text-blue-600 hover:text-blue-800'>{author.name}</NavLink>
           ))}
         </div>
+        <FavoritesButton purpose="authors" itemId={id}/>
       </div>
-      <Shelf title={`Top books by ${authorName}`} getBooks={getBooks} params={{authors: [authorName]}}/>
+      <Shelf title={`Top books by ${authorName}`} getItems={getBooks} params={{authors: [authorName]}}/>
     </div>
   )
 }
