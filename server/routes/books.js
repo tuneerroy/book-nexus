@@ -63,61 +63,48 @@ router.get('/', (req, res) => {
 //route for books that match a given set of keywords (for search functionality)
 router.get('/search', (req, res) => {
   const keywords = req.query.keywords
+  console.log("keyword");
   const query = `
   WITH
-    Keywords(keyword) AS (
-      ${helpers.fListToTable(keywords)}
-    ),
-  
     TitleMatches AS (
-      SELECT isbn, COUNT(*) AS matches
-      FROM Book B, Keywords K
-      WHERE B.title LIKE CONCAT('%', K.keyword,'%')
+      SELECT isbn, MATCH(title) AGAINST ('${keywords}') AS matches
+      FROM Book
+      WHERE MATCH(title) AGAINST ('${keywords}')
       GROUP BY isbn
     ),
-  
+
     DescriptionMatches AS (
-      SELECT isbn, COUNT(*) AS matches
-      FROM Book B, Keywords K
-      WHERE B.description LIKE CONCAT('%', K.keyword,'%')
+      SELECT isbn, MATCH(description) AGAINST ('${keywords}') AS matches
+      FROM Book
+      WHERE MATCH(description) AGAINST ('${keywords}')
       GROUP BY isbn
     ),
-  
-    MatchesPerReview AS (
-        SELECT isbn, (matches / num) AS matchesPerReview
-        FROM(
-          (SELECT isbn, COUNT(*) AS matches
-            FROM Review R NATURAL JOIN Book B,
-                Keywords K
-            WHERE B.title LIKE CONCAT('%', K.keyword,'%')
-            GROUP BY isbn
-          ) ReviewMatch
-          NATURAL JOIN (SELECT isbn, COUNT(*) AS num
-            FROM Review
-            GROUP BY isbn) ReviewCount
-          )
+
+    ReviewMatches AS (
+      SELECT isbn, AVG(MATCH(review) AGAINST ('${keywords}')) AS matches
+      FROM Review
+      GROUP BY isbn
+      HAVING AVG(MATCH(review) AGAINST ('${keywords}')) > 0
     ),
-  
+
     TotalPriority AS (
-      SELECT T.isbn,
-              T.matches
-                  + COALESCE(R.matchesPerReview, 0)
+      SELECT B.isbn,
+              COALESCE(T.matches, 0) * 5
+                  + COALESCE(R.matches, 0) * 2
                   + COALESCE(D.matches, 0) AS Priority
       FROM Book B
       LEFT JOIN TitleMatches T
       ON B.isbn = T.isbn
-      LEFT JOIN MatchesPerReview R
+      LEFT JOIN ReviewMatches R
       ON B.isbn = R.isbn
       LEFT JOIN DescriptionMatches D
       ON B.isbn = D.isbn
     )
 
     SELECT *
-    FROM Book B NATURAL JOIN
-      (SELECT *
-      FROM TotalPriority
-      ) P
+    FROM Book B NATURAL JOIN TotalPriority
     ORDER BY priority DESC
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)};
   `
 
   db.query(query, (err, results) => {
