@@ -17,6 +17,9 @@ router.get('/books', async (req, res) => {
 })
 
 router.post('/books', async (req, res) => {
+  if (!req.body.isbn) {
+    return res.status(400).json({message: 'Missing ISBN'})
+  }
   const user = await User.findOne({email: req.user.email})
   if (!user.books.includes(req.body.isbn)) {
     user.books.push(req.body.isbn)
@@ -28,6 +31,9 @@ router.post('/books', async (req, res) => {
 })
 
 router.delete('/books', async (req, res) => {
+  if (!req.body.isbn) {
+    return res.status(400).json({ message: 'Missing ISBN' })
+  }
   const user = await User.findOne({email: req.user.email})
   if (user.books.includes(req.body.isbn)) {
     user.books = user.books.filter((book) => book !== req.body.isbn)
@@ -54,6 +60,9 @@ router.get('/authors', async (req, res) => {
 })
 
 router.post('/authors', async (req, res) => {
+  if (!req.body.authorId) {
+    return res.status(400).json({ message: "Missing author ID" })
+  }
   const user = await User.findOne({email: req.user.email})
   if (!user.authors.includes(req.body.authorId)) {
     user.authors.push(req.body.authorId)
@@ -65,6 +74,9 @@ router.post('/authors', async (req, res) => {
 })
 
 router.delete('/authors', async (req, res) => {
+  if (!req.body.authorId) {
+    return res.status(400).json({ message: "Missing author ID" })
+  }
   const user = await User.findOne({email: req.user.email})
   if (user.authors.includes(req.body.authorId)) {
     user.authors = user.authors.filter((author) => author !== req.body.authorId)
