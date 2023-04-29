@@ -43,9 +43,6 @@ const PrivateRoute = ({Component, ...props}) => {
               <Button color="inherit" component={NavLink} to="/books">
                 Books
               </Button>
-              <Button color="inherit" component={NavLink} to="/authors">
-                Authors
-              </Button>
               <Button color="inherit" onClick={handleLogout}>
                 Logout
               </Button>

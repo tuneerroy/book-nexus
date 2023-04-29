@@ -21,7 +21,7 @@ function FavoritesButton({ purpose, itemId }) {
 
   const addItem = () => {
     setLoading(true)
-    const body = purpose === 'books' ? { isbn: itemId } : { authorId: itemId };
+    const body = purpose === 'books' ? { isbn: itemId } : { id: itemId };
     fetch(`/api/favorites/${purpose}`, {
       method: "POST",
       headers: {
@@ -37,7 +37,7 @@ function FavoritesButton({ purpose, itemId }) {
 
   const removeItem = () => {
     setLoading(true)
-    const body = purpose === 'books' ? { isbn: itemId } : { authorId: itemId };
+    const body = purpose === 'books' ? { isbn: itemId } : { id: itemId };
     fetch(`/api/favorites/${purpose}`, {
       method: "DELETE",
       headers: {

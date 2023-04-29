@@ -60,12 +60,12 @@ router.get('/authors', async (req, res) => {
 })
 
 router.post('/authors', async (req, res) => {
-  if (!req.body.authorId) {
+  if (!req.body.id) {
     return res.status(400).json({ message: "Missing author ID" })
   }
   const user = await User.findOne({email: req.user.email})
-  if (!user.authors.includes(req.body.authorId)) {
-    user.authors.push(req.body.authorId)
+  if (!user.authors.includes(req.body.id)) {
+    user.authors.push(req.body.id)
     await user.save()
     res.json({ success: true, authors: user.authors })
   } else {
@@ -74,26 +74,26 @@ router.post('/authors', async (req, res) => {
 })
 
 router.delete('/authors', async (req, res) => {
-  if (!req.body.authorId) {
+  if (!req.body.id) {
     return res.status(400).json({ message: "Missing author ID" })
   }
   const user = await User.findOne({email: req.user.email})
-  if (user.authors.includes(req.body.authorId)) {
-    user.authors = user.authors.filter((author) => author !== req.body.authorId)
+  if (user.authors.includes(req.body.id)) {
+    user.authors = user.authors.filter((author) => author !== req.body.id)
     await user.save()
-    res.json({ authors: user.authors })
+    res.json({ success: true, authors: user.authors })
   } else {
     res.status(400).json({ message: "Author already removed" })
   }
 })
 
-router.get("/authors/:authorId/check", async (req, res) => {
+router.get("/authors/:id/check", async (req, res) => {
   const user = await User.findOne({ email: req.user.email })
-  res.json({ favorited: user.authors.includes(req.params.authorId) })
+  res.json({ favorited: user.authors.includes(req.params.id) })
 })
 
-router.get("/authors/:authorId/count", async (req, res) => {
-  const users = await User.find({ authors: req.params.authorId })
+router.get("/authors/:id/count", async (req, res) => {
+  const users = await User.find({ authors: req.params.id })
   res.json({ count: users.length })
 })
 

@@ -3,6 +3,34 @@ const router = express.Router()
 const db = require('../db')
 const helpers = require('../helpers');
 
+// route to get details of authors based on ids
+router.get('/details', (req, res) => {
+  const query = `
+    WITH DesiredAuthors AS (
+      SELECT id, name
+      FROM Author
+      WHERE ${helpers.fColInList("id", req.query.ids.split(','))}
+    )
+    SELECT id, name, AVG(rating) AS avg_rating, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories
+    FROM DesiredAuthors
+    NATURAL LEFT JOIN WorkedOn
+    NATURAL LEFT JOIN Review
+    NATURAL LEFT JOIN CategoryOf
+    GROUP BY id, name
+  `
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).send('DB Error')
+    }
+    results.forEach((result) => {
+      result.categories = result.categories && result.categories.split(';')
+    })
+    console.log(results)
+    res.json(results)
+  })
+})
+
 router.get('/:id', (req, res) => {
   query = `SELECT name FROM Author WHERE id = ${req.params.id}`
   db.query(query, (err, results) => {

@@ -45,8 +45,64 @@ router.get('/', (req, res) => {
   ${helpers.fGetPage(req.query.page, req.query.pageSize)}
   `
 
-  console.log(query)
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).send('DB Error')
+    }
+    results.forEach((result) => {
+      result.categories = result.categories && result.categories.split(';')
+      result.authors = result.authors && result.authors.split(';').map((author) => {
+        const [id, name] = author.split('|')
+        return {id, name}
+      })
+    })
+    res.json(results)
+  })
+})
 
+// get all details for books with given isbsn
+router.get('/details', (req, res) => {
+  const query = `
+    SELECT isbn, title, image_link, 
+      GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories, 
+      GROUP_CONCAT(DISTINCT CONCAT(author_id, '|', name) SEPARATOR ';') AS authors, 
+      AVG(rating) AS rating
+    FROM Book NATURAL LEFT JOIN CategoryOf NATURAL LEFT JOIN WorkedOn LEFT JOIN Author ON author_id=id NATURAL LEFT JOIN Review
+    WHERE ${helpers.fColInList('isbn', req.query.isbns.split(','))} 
+    GROUP BY isbn
+    ORDER BY AVG(rating) DESC, COUNT(rating) DESC
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)}
+  `
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).send('DB Error')
+    }
+    results.forEach((result) => {
+      result.categories = result.categories && result.categories.split(';')
+      result.authors = result.authors && result.authors.split(';').map((author) => {
+        const [id, name] = author.split('|')
+        return {id, name}
+      })
+    })
+    res.json(results)
+  })
+})
+
+// get all details for books with given isbsn
+router.get('/details', (req, res) => {
+  const query = `
+    SELECT isbn, title, image_link, 
+      GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories, 
+      GROUP_CONCAT(DISTINCT CONCAT(author_id, '|', name) SEPARATOR ';') AS authors, 
+      AVG(rating) AS rating
+    FROM Book NATURAL LEFT JOIN CategoryOf NATURAL LEFT JOIN WorkedOn LEFT JOIN Author ON author_id=id NATURAL LEFT JOIN Review
+    WHERE ${helpers.fColInList('isbn', req.query.isbns.split(','))} 
+    GROUP BY isbn
+    ORDER BY AVG(rating) DESC, COUNT(rating) DESC
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)}
+  `
   db.query(query, (err, results) => {
     if (err) {
       console.error(err)
@@ -66,61 +122,48 @@ router.get('/', (req, res) => {
 // route for books that match a given set of keywords (for search functionality)
 router.get('/search', (req, res) => {
   const keywords = req.query.keywords
+  console.log('keyword')
   const query = `
   WITH
-    Keywords(keyword) AS (
-      ${helpers.fListToTable(keywords)}
-    ),
-  
     TitleMatches AS (
-      SELECT isbn, COUNT(*) AS matches
-      FROM Book B, Keywords K
-      WHERE B.title LIKE CONCAT('%', K.keyword,'%')
+      SELECT isbn, MATCH(title) AGAINST ('${keywords}') AS matches
+      FROM Book
+      WHERE MATCH(title) AGAINST ('${keywords}')
       GROUP BY isbn
     ),
-  
+
     DescriptionMatches AS (
-      SELECT isbn, COUNT(*) AS matches
-      FROM Book B, Keywords K
-      WHERE B.description LIKE CONCAT('%', K.keyword,'%')
+      SELECT isbn, MATCH(description) AGAINST ('${keywords}') AS matches
+      FROM Book
+      WHERE MATCH(description) AGAINST ('${keywords}')
       GROUP BY isbn
     ),
-  
-    MatchesPerReview AS (
-        SELECT isbn, (matches / num) AS matchesPerReview
-        FROM(
-          (SELECT isbn, COUNT(*) AS matches
-            FROM Review R NATURAL JOIN Book B,
-                Keywords K
-            WHERE B.title LIKE CONCAT('%', K.keyword,'%')
-            GROUP BY isbn
-          ) ReviewMatch
-          NATURAL JOIN (SELECT isbn, COUNT(*) AS num
-            FROM Review
-            GROUP BY isbn) ReviewCount
-          )
+
+    ReviewMatches AS (
+      SELECT isbn, AVG(MATCH(review) AGAINST ('${keywords}')) AS matches
+      FROM Review
+      GROUP BY isbn
+      HAVING AVG(MATCH(review) AGAINST ('${keywords}')) > 0
     ),
-  
+
     TotalPriority AS (
-      SELECT T.isbn,
-              T.matches
-                  + COALESCE(R.matchesPerReview, 0)
+      SELECT B.isbn,
+              COALESCE(T.matches, 0) * 5
+                  + COALESCE(R.matches, 0) * 2
                   + COALESCE(D.matches, 0) AS Priority
       FROM Book B
       LEFT JOIN TitleMatches T
       ON B.isbn = T.isbn
-      LEFT JOIN MatchesPerReview R
+      LEFT JOIN ReviewMatches R
       ON B.isbn = R.isbn
       LEFT JOIN DescriptionMatches D
       ON B.isbn = D.isbn
     )
 
     SELECT *
-    FROM Book B NATURAL JOIN
-      (SELECT *
-      FROM TotalPriority
-      ) P
+    FROM Book B NATURAL JOIN TotalPriority
     ORDER BY priority DESC
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)};
   `
 
   console.log(query)
