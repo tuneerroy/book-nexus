@@ -6,6 +6,7 @@ import BookRow from './BookRow';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Shelf from './Shelf';
+import FavoritesButton from './FavoritesButton';
 
 function Book() {
   const {id: isbn} = useParams();
@@ -24,7 +25,7 @@ function Book() {
   const {title, year, description, image_link, categories, authors, rating, num_reviews} = book;
 
   return (
-    <div className='py-5 space-y-8 px-20'>
+    <div className='py-5 space-y-8 px-20 text-start'>
       <div className='flex flex-col md:flex-row md:space-x-16'>
         <div className='w-1/5 flex items-center'>
           <img className='min-w-[160px] w-full rounded-lg' src={image_link} alt={title} onLoad={handleImageLoad}/>
@@ -63,6 +64,7 @@ function Book() {
             </div>
           </div>
         </div>
+        <FavoritesButton purpose="books" itemId={isbn}/>
       </div>
       <Shelf title={"Books by the same author"} getBooks={getBooks} params={{authors: authors ? authors.map(author => author.name) : ['']}}/>
       <Shelf title={"Books of the same genre"} getBooks={getBooks} params={{categories: categories ? categories : ['']}}/>

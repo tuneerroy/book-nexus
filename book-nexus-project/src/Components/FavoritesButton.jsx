@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
+import { ThemeProvider, Typography } from "@mui/material";
 
 const validPurposes = ['books', 'authors'];
 
@@ -46,9 +47,17 @@ function FavoritesButton({ purpose, itemId }) {
   };
 
   if (checked) {
-    return <Button onClick={removeItem}>Remove from favorites</Button>;
+    return (
+    <Button onClick={removeItem} variant="contained" sx={{display: 'flex', alignItems: 'flex-start', height: '60px'}}>
+      Remove from favorites
+    </Button>
+    )
   } else {
-    return <Button onClick={addItem}>Add to favorites</Button>;
+    return (
+    <Button onClick={addItem}  variant="contained" sx={{display: 'flex', alignItems: 'flex-start', height: '60px'}}>
+      Add to favorites
+    </Button>
+    )
   }
 }
 

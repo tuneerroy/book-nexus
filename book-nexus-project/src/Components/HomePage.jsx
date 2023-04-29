@@ -22,7 +22,7 @@ function HomePage() {
     <div>
       <h1>Favorite Books</h1>
       <ul>
-        {books.length ? books.map((book) => (
+        {books & books.length ? books.map((book) => (
           <li key={book.isbn}>
             <Link to={`/books/${book.isbn}`}>{book.title}</Link>
           </li>
@@ -31,7 +31,7 @@ function HomePage() {
       <br />
       <h1>Favorite Authors</h1>
       <ul>
-        {authors.length ? authors.map((author) => (
+        {authors && authors.length ? authors.map((author) => (
           <li key={author.id}>
             <Link to={`/authors/${author.id}`}>{author.name}</Link>
           </li>
