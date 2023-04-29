@@ -6,11 +6,7 @@ import Typography from '@mui/material/Typography';
 import { NavLink } from 'react-router-dom';
 import './styles.css'
 
-function Book(props) {
-    const {
-        isbn, title, image_link
-    } = props;
-
+function Book({isbn, title, image_link}) {
     const handleImageLoad = (e) => {
       if (e.target.naturalWidth === 1 && e.target.naturalHeight === 1) {
         e.target.src = 'https://islandpress.org/sites/default/files/default_book_cover_2015.jpg';
