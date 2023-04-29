@@ -7,3 +7,8 @@
     height: 300px;
     object-fit: fill;
 }
+
+.authorTable {
+    display: flex;
+    align-items: center;
+}
