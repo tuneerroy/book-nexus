@@ -18,8 +18,8 @@ router.get('/books', async (req, res) => {
 
 router.post('/books', async (req, res) => {
   const user = await User.findOne({email: req.user.email})
-  if (!user.books.includes(req.body.book)) {
-    user.books.push(req.body.book)
+  if (!user.books.includes(req.body.isbn)) {
+    user.books.push(req.body.isbn)
     await user.save()
     res.json({ success: true, books: user.books })
   } else {
@@ -29,8 +29,8 @@ router.post('/books', async (req, res) => {
 
 router.delete('/books', async (req, res) => {
   const user = await User.findOne({email: req.user.email})
-  if (user.books.includes(req.body.book)) {
-    user.books = user.books.filter((book) => book !== req.body.book)
+  if (user.books.includes(req.body.isbn)) {
+    user.books = user.books.filter((book) => book !== req.body.isbn)
     await user.save()
     res.json({ success: true, books: user.books })
   } else {
@@ -44,7 +44,7 @@ router.get('/books/:isbn/check', async (req, res) => {
 })
 
 router.get("/books/:isbn/count", async (req, res) => {
-  const users = await User.find({ books: req.params.title })
+  const users = await User.find({ books: req.params.isbn })
   res.json({ count: users.length })
 })
 
@@ -55,8 +55,8 @@ router.get('/authors', async (req, res) => {
 
 router.post('/authors', async (req, res) => {
   const user = await User.findOne({email: req.user.email})
-  if (!user.authors.includes(req.body.author)) {
-    user.authors.push(req.body.author)
+  if (!user.authors.includes(req.body.authorId)) {
+    user.authors.push(req.body.authorId)
     await user.save()
     res.json({ success: true, authors: user.authors })
   } else {
@@ -66,8 +66,8 @@ router.post('/authors', async (req, res) => {
 
 router.delete('/authors', async (req, res) => {
   const user = await User.findOne({email: req.user.email})
-  if (user.authors.includes(req.body.author)) {
-    user.authors = user.authors.filter((author) => author !== req.body.author)
+  if (user.authors.includes(req.body.authorId)) {
+    user.authors = user.authors.filter((author) => author !== req.body.authorId)
     await user.save()
     res.json({ authors: user.authors })
   } else {
