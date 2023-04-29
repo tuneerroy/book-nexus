@@ -22,9 +22,6 @@ export const getBook = async (isbn) => {
   }
 }
 
-
-
-
 export const getAuthor = async (id) => {
   try {
     const response = await axios.get(`/api/authors/${id}`);
