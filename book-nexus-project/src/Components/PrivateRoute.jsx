@@ -37,7 +37,7 @@ const PrivateRoute = ({Component, ...props}) => {
         <>
           <AppBar position="relative" sx={{backgroundColor: '#023047'}}>
             <Toolbar>
-              <Typography variant="h5" sx={{paddingRight: 10}}>
+              <Typography variant="h5" sx={{paddingRight: 5}}>
                 <NavLink to={`/home`} className="title">Book Nexus</NavLink>
               </Typography>
               <Button color="inherit" component={NavLink} to="/books">

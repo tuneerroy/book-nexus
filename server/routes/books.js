@@ -7,7 +7,7 @@ const helpers = require('../helpers')
 router.get('/test', (req, res) => {
   const query = `
     SELECT * FROM Book
-    LIMIT 10
+    LIMIT 36
   `
   db.query(query, (err, results) => {
     if (err) {

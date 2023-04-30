@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Shelf from './Shelf'
-import { Alert, Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material'
+import { Alert, Box, Button, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
 
 const CategoryRecs = () => {
   const [includeGenres, setIncludeGenres] = useState("");
@@ -32,30 +32,38 @@ const CategoryRecs = () => {
   };
   
   return (
-    <div style={{paddingTop: 100, maxWidth: 1000, margin: "auto"}}>
-      <form onSubmit={handleSubmit}>
-        {warning && <Alert severity="warning">Can't overlap included and excluded genres!</Alert>}
-        <Box display="flex" flexDirection="column">
-          <TextField
-            label="Genres to include"
-            value={includeGenres}
-            onChange={(event) => setIncludeGenres(event.target.value)}
-          />
-          <TextField
-            label="Genres to exclude"
-            value={excludeGenres}
-            onChange={(event) => setExcludeGenres(event.target.value)}
-          />
-          <FormControlLabel
-            control={<Checkbox checked={andMode} onChange={() => setAndMode(!andMode)} />}
-            label="Strictly Match"
-          />
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
-        </Box>
-      </form>
-      {getAuthors && <Shelf title={"Author Recommendations"} getItems={getAuthors} purpose={"authors"} />}
+    <div style={{paddingTop: 100, maxWidth: 1200, margin: "auto"}}>
+      <Box sx={{maxWidth: 600, margin: 'auto'}}>
+        <Typography variant='h5' sx={{textAlign: 'left'}}>Filter Genres</Typography>
+        <Typography variant='h7' sx={{textAlign: 'left'}}>
+          Include or exclude any genres from your personalized recommendations by listing them below.
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          {warning && <Alert severity="warning">Can't overlap included and excluded genres!</Alert>}
+          <Box display="flex" flexDirection="column">
+            <TextField
+              label="Genres to include"
+              value={includeGenres}
+              onChange={(event) => setIncludeGenres(event.target.value)}
+              sx={{marginTop: 2, marginBottom: 1}}
+            />
+            <TextField
+              label="Genres to exclude"
+              value={excludeGenres}
+              onChange={(event) => setExcludeGenres(event.target.value)}
+              sx={{marginBottom: 1}}
+            />
+            <FormControlLabel
+              control={<Checkbox checked={andMode} onChange={() => setAndMode(!andMode)} />}
+              label="Strictly Match"
+            />
+            <Button type="submit" variant="contained" sx={{backgroundColor: '#0096c7', marginBottom: 3}}>
+              Filter
+            </Button>
+          </Box>
+        </form>
+      </Box>
+      {getAuthors && <Shelf title={"Author Recommendations"} getItems={getAuthors} purpose={"authors"}/>}
     </div>
   )
 }

@@ -3,6 +3,7 @@ import BookRecs from './BookRecs'
 import AuthorRecs from './AuthorRecs'
 import CategoryRecs from './CategoryRecs'
 import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 
 const RecsPage = () => {
   const [favoriteBooks, setFavoriteBooks] = useState([])
@@ -29,10 +30,12 @@ const RecsPage = () => {
       {favoriteAuthors.length ? (
         <AuthorRecs favoriteAuthors={favoriteAuthors} />
       ) : 
-      <Typography variant="h4" component="h4" sx={{ textAlign: 'center' }}>
+      <Typography variant="h4" component="h4" sx={{ textAlign: 'center', mt: '1em' }}>
         You have no favorite authors yet!
       </Typography>}
-      <CategoryRecs />
+      <Box sx={{marginBottom: 10}}>
+        <CategoryRecs />
+      </Box>
     </>
   )
 }
