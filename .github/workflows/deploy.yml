@@ -23,7 +23,7 @@ jobs:
       - name: Copy frontend build to backend
         run: |
           rm -rf server/public
-          cp -r book-nexus-project/build server/public 
+          cp -r book-nexus-project/build server/public
 
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12

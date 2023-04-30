@@ -1,7 +1,7 @@
-const express = require("express")
-const router = express.Router()
-const db = require("../db")
-const helpers = require("../helpers")
+const express = require("express");
+const router = express.Router();
+const db = require("../db");
+const helpers = require("../helpers");
 
 // route to get details of authors based on ids
 // TODO: don't need categories, just id, name, and avg_rating
@@ -25,32 +25,32 @@ router.get("/details", (req, res) => {
     NATURAL LEFT JOIN Review
     GROUP BY author_id, name
     ${helpers.fGetPage(req.query.page, req.query.pageSize)};
-  `
+  `;
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
     results.forEach((result) => {
-      result.categories = result.categories && result.categories.split(";")
-    })
-    res.json(results)
-  })
-})
+      result.categories = result.categories && result.categories.split(";");
+    });
+    res.json(results);
+  });
+});
 
 // TODO: i need id, name, list of categories their books cover, and avg_rating
 router.get("/:id", (req, res) => {
-  query = `SELECT name FROM Author WHERE id = ${req.params.id}`
+  query = `SELECT name FROM Author WHERE id = ${req.params.id}`;
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
-    if (results.length === 0) return res.status(404).send("Author not found")
-    res.json(results[0].name)
-  })
-})
+    if (results.length === 0) return res.status(404).send("Author not found");
+    res.json(results[0].name);
+  });
+});
 
 /*
 Query to get authors who write a given list of genres
@@ -61,11 +61,11 @@ Parameters:
 */
 // TODO: don't need categories, just id, name, and avg_rating
 router.get("/recommendations/category", (req, res) => {
-  req.query.including ?? "" // TODO: wtf is this for?
-  req.query.excluding ?? ""
-  const includeList = req.query.including.split(",")
-  const excludeList = req.query.excluding.split(",")
-  const andMode = req.query.andMode
+  req.query.including ?? ""; // TODO: wtf is this for?
+  req.query.excluding ?? "";
+  const includeList = req.query.including.split(",");
+  const excludeList = req.query.excluding.split(",");
+  const andMode = req.query.andMode;
   const query = `
   WITH
     IncludedBooks AS (
@@ -99,16 +99,16 @@ router.get("/recommendations/category", (req, res) => {
       NATURAL JOIN WorkedOn W
       )
     ORDER BY count DESC
-    ${helpers.fGetPage(req.query.page, req.query.pageSize)};`
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)};`;
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
-    res.json(results)
-  })
-})
+    res.json(results);
+  });
+});
 
 /*
 Recommends authors using a list of given authors
@@ -117,7 +117,7 @@ params:
 */
 // TODO: don't need categories, just id, name, and avg_rating
 router.get("/recommendations/authorList", (req, res) => {
-  const authorList = req.query.authorList.split(",")
+  const authorList = req.query.authorList.split(",");
   const query = `
   WITH
     AuthorListIsbns AS (
@@ -161,14 +161,14 @@ router.get("/recommendations/authorList", (req, res) => {
     ORDER BY priority DESC
     ${helpers.fGetPage(req.query.page, req.query.pageSize)}
     ;
-  `
+  `;
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
-    res.json(results)
-  })
-})
+    res.json(results);
+  });
+});
 
-module.exports = router
+module.exports = router;

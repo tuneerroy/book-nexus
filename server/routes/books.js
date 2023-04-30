@@ -1,7 +1,7 @@
-const express = require("express")
-const router = express.Router()
-const db = require("../db")
-const helpers = require("../helpers")
+const express = require("express");
+const router = express.Router();
+const db = require("../db");
+const helpers = require("../helpers");
 
 // TODO: remove this eventually
 router.get("/test", (req, res) => {
@@ -9,15 +9,15 @@ router.get("/test", (req, res) => {
     SELECT * FROM Book
     LIMIT 36
     OFFSET 24
-  `
+  `;
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
-    res.json(results)
-  })
-})
+    res.json(results);
+  });
+});
 
 // get all books with filters
 router.get("/", (req, res) => {
@@ -52,25 +52,25 @@ router.get("/", (req, res) => {
   ) SELECT * FROM books_wanted NATURAL LEFT JOIN categories_agg NATURAL LEFT JOIN authors_agg NATURAL LEFT JOIN rating_agg
   ORDER BY rating DESC, num_reviews DESC
   ${helpers.fGetPage(req.query.page, req.query.pageSize)}
-  `
+  `;
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
     results.forEach((result) => {
-      result.categories = result.categories && result.categories.split(";")
+      result.categories = result.categories && result.categories.split(";");
       result.authors =
         result.authors &&
         result.authors.split(";").map((author) => {
-          const [id, name] = author.split("|")
-          return { id, name }
-        })
-    })
-    res.json(results)
-  })
-})
+          const [id, name] = author.split("|");
+          return { id, name };
+        });
+    });
+    res.json(results);
+  });
+});
 
 // get all details for books with given isbsn
 router.get("/details", (req, res) => {
@@ -84,28 +84,28 @@ router.get("/details", (req, res) => {
     GROUP BY isbn
     ORDER BY AVG(rating) DESC, COUNT(rating) DESC
     ${helpers.fGetPage(req.query.page, req.query.pageSize)}
-  `
+  `;
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
     results.forEach((result) => {
-      result.categories = result.categories && result.categories.split(";")
+      result.categories = result.categories && result.categories.split(";");
       result.authors =
         result.authors &&
         result.authors.split(";").map((author) => {
-          const [id, name] = author.split("|")
-          return { id, name }
-        })
-    })
-    res.json(results)
-  })
-})
+          const [id, name] = author.split("|");
+          return { id, name };
+        });
+    });
+    res.json(results);
+  });
+});
 
 // route for books that match a given set of keywords (for search functionality)
 router.get("/search", (req, res) => {
-  const keywords = req.query.keywords
+  const keywords = req.query.keywords;
   const query = `
   WITH
     TitleMatches AS (
@@ -147,20 +147,20 @@ router.get("/search", (req, res) => {
     FROM Book B NATURAL JOIN TotalPriority
     ORDER BY priority DESC
     ${helpers.fGetPage(req.query.page, req.query.pageSize)};
-  `
+  `;
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
     results.forEach((result) => {
-      result.categories = result.categories && result.categories.split(";")
-      result.authors = result.authors && result.authors.split(";")
-    })
-    res.json(results)
-  })
-})
+      result.categories = result.categories && result.categories.split(";");
+      result.authors = result.authors && result.authors.split(";");
+    });
+    res.json(results);
+  });
+});
 
 // const query = `
 // SELECT isbn, title, year, description, image_link, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories, GROUP_CONCAT(DISTINCT name SEPARATOR ';') AS authors, AVG(rating) AS rating, COUNT(rating) AS num_reviews
@@ -174,24 +174,24 @@ router.get("/:isbn", (req, res) => {
     SELECT isbn, title, year, description, image_link, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories, GROUP_CONCAT(DISTINCT CONCAT(author_id, '|', name) SEPARATOR ';') AS authors, AVG(rating) AS rating, COUNT(rating) AS num_reviews
     FROM Book NATURAL LEFT JOIN CategoryOf NATURAL LEFT JOIN WorkedOn LEFT JOIN Author ON author_id=id NATURAL LEFT JOIN Review
     WHERE isbn = '${req.params.isbn}'
-  `
+  `;
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
-    if (results.length === 0) return res.status(404).send("Book not found")
+    if (results.length === 0) return res.status(404).send("Book not found");
     results[0].categories =
-      results[0].categories && results[0].categories.split(";")
+      results[0].categories && results[0].categories.split(";");
     results[0].authors =
       results[0].authors &&
       results[0].authors.split(";").map((author) => {
-        const [id, name] = author.split("|")
-        return { id, name }
-      })
-    res.json(results[0])
-  })
-})
+        const [id, name] = author.split("|");
+        return { id, name };
+      });
+    res.json(results[0]);
+  });
+});
 
 // get book nonempty reviews by isbn
 router.get("/:isbn/reviews", (req, res) => {
@@ -200,15 +200,15 @@ router.get("/:isbn/reviews", (req, res) => {
     WHERE isbn = '${req.params.isbn}' AND review != ''
     ORDER BY rating DESC
     ${helpers.fGetPage(req.query.page, req.query.pageSize)}
-  `
+  `;
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
-    res.json(results)
-  })
-})
+    res.json(results);
+  });
+});
 
 // route for recommendations based off of list of books (isbns) - uses categories in bg
 router.get("/recommendations/category", (req, res) => {
@@ -237,20 +237,20 @@ router.get("/recommendations/category", (req, res) => {
     FROM books_wanted NATURAL LEFT JOIN WorkedOn LEFT JOIN Author ON author_id=id
     GROUP BY isbn
   ) SELECT * FROM books_wanted NATURAL LEFT JOIN categories_agg NATURAL LEFT JOIN authors_agg;
-  `
+  `;
   db.query(query, (err, results) => {
     if (err) {
-      console.error(err)
-      return res.status(500).send("DB Error")
+      console.error(err);
+      return res.status(500).send("DB Error");
     }
     results.forEach((result) => {
-      result.categories = result.categories?.split(";")
-      result.authors = result.authors?.split(";")
-    })
-    res.json(results)
-  })
-})
+      result.categories = result.categories?.split(";");
+      result.authors = result.authors?.split(";");
+    });
+    res.json(results);
+  });
+});
 
 // route for recommendations based off of similar authors to a list of books
 
-module.exports = router
+module.exports = router;

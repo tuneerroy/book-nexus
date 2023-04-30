@@ -1,9 +1,9 @@
 function auth(req, res, next) {
   if (req.isAuthenticated()) {
-    next()
+    next();
   } else {
-    res.status(401).json({ error: "Unauthorized request" })
+    res.status(401).json({ error: "Unauthorized request" });
   }
 }
 
-module.exports = auth
+module.exports = auth;
