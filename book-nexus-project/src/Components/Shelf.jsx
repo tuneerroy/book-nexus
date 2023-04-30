@@ -10,9 +10,18 @@ function Shelf({title, getItems, purpose="books", params}) {
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
+  const [maxPage, setMaxPage] = useState(Infinity)
+
   useEffect(() => {
     getItems({...params, pageSize: 7, page})
-      .then(data => setItems(data))
+      .then(data => setItems(oldData => {
+        if (!data || !data.length) {
+          setMaxPage(page - 1)
+          setPage(page - 1)
+          return oldData
+        }
+        return data
+      }))
       .finally(() => setLoading(false))
   }, [params, getItems, page])
   
@@ -23,9 +32,9 @@ function Shelf({title, getItems, purpose="books", params}) {
       <div className='flex flex-row w-full min-h-[10vw]'>
         {items && items.length ?
         <>
-          <BsChevronCompactLeft className='text-3xl my-auto cursor-pointer' onClick={() => setPage(page => page - 1)}/>
+          <BsChevronCompactLeft className='text-3xl my-auto cursor-pointer' onClick={() => page > 1 && setPage(page => page - 1)}/>
           {purpose === "books" ? <BookRow books={items} /> : <AuthorRow authors={items} />}
-          <BsChevronCompactRight className='text-3xl my-auto cursor-pointer' onClick={() => setPage(page => page + 1)}/>
+          <BsChevronCompactRight className='text-3xl my-auto cursor-pointer' onClick={() => page < maxPage && setPage(page => page + 1)}/>
         </> : <div className='pl-9' >No items to display</div>}
       </div>}
     </div>
