@@ -1,11 +1,11 @@
-const express = require('express')
+const express = require("express")
 const router = express.Router()
-const db = require('../db')
-const helpers = require('../helpers');
+const db = require("../db")
+const helpers = require("../helpers")
 
 // route to get details of authors based on ids
 // TODO: don't need categories, just id, name, and avg_rating
-router.get('/details', (req, res) => {
+router.get("/details", (req, res) => {
   const query = `
     WITH DesiredAuthors AS (
       SELECT id as author_id, name
@@ -30,24 +30,24 @@ router.get('/details', (req, res) => {
   db.query(query, (err, results) => {
     if (err) {
       console.error(err)
-      return res.status(500).send('DB Error')
+      return res.status(500).send("DB Error")
     }
     results.forEach((result) => {
-      result.categories = result.categories && result.categories.split(';')
+      result.categories = result.categories && result.categories.split(";")
     })
     res.json(results)
   })
 })
 
 // TODO: i need id, name, list of categories their books cover, and avg_rating
-router.get('/:id', (req, res) => {
+router.get("/:id", (req, res) => {
   query = `SELECT name FROM Author WHERE id = ${req.params.id}`
   db.query(query, (err, results) => {
     if (err) {
       console.error(err)
-      return res.status(500).send('DB Error')
+      return res.status(500).send("DB Error")
     }
-    if (results.length === 0) return res.status(404).send('Author not found')
+    if (results.length === 0) return res.status(404).send("Author not found")
     res.json(results[0].name)
   })
 })
@@ -60,24 +60,24 @@ Parameters:
   - andMode: if defined, requires that all (instead of any) categories are met
 */
 // TODO: don't need categories, just id, name, and avg_rating
-router.get('/recommendations/category', (req, res) => {
-  req.query.including ?? ''; // TODO: wtf is this for?
-  req.query.excluding ?? '';
-  const includeList = req.query.including.split(',')
-  const excludeList = req.query.excluding.split(',')
+router.get("/recommendations/category", (req, res) => {
+  req.query.including ?? "" // TODO: wtf is this for?
+  req.query.excluding ?? ""
+  const includeList = req.query.including.split(",")
+  const excludeList = req.query.excluding.split(",")
   const andMode = req.query.andMode
   const query = `
   WITH
     IncludedBooks AS (
       SELECT isbn, category
       FROM CategoryOf
-      WHERE ${helpers.fColInList('category', includeList)}
+      WHERE ${helpers.fColInList("category", includeList)}
     ),
 
     ExcludedBooks AS (
       SELECT isbn
       FROM CategoryOf
-      WHERE ${helpers.fColInList('category', excludeList)}
+      WHERE ${helpers.fColInList("category", excludeList)}
     )
 
     SELECT X.id, X.name, X.avg_rating
@@ -87,7 +87,11 @@ router.get('/recommendations/category', (req, res) => {
       JOIN WorkedOn W ON A.id = W.author_id
       NATURAL JOIN IncludedBooks I
       GROUP BY A.id, A.name
-      HAVING ${andMode ? `COUNT(DISTINCT I.category) = ${includeList.length}` : `COUNT(*) > 0`}
+      HAVING ${
+        andMode
+          ? `COUNT(DISTINCT I.category) = ${includeList.length}`
+          : `COUNT(*) > 0`
+      }
     ) X
     WHERE X.id NOT IN (
       SELECT W.author_id AS id
@@ -97,13 +101,13 @@ router.get('/recommendations/category', (req, res) => {
     ORDER BY count DESC
     ${helpers.fGetPage(req.query.page, req.query.pageSize)};`
 
-    db.query(query, (err, results) => {
-      if (err) {
-        console.error(err)
-        return res.status(500).send('DB Error')
-      }
-      res.json(results)
-    })
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).send("DB Error")
+    }
+    res.json(results)
+  })
 })
 
 /*
@@ -112,21 +116,21 @@ params:
   author_list: comma delimited list of given authors
 */
 // TODO: don't need categories, just id, name, and avg_rating
-router.get('/recommendations/authorList', (req, res) => {
-  const authorList = req.query.authorList.split(',')
+router.get("/recommendations/authorList", (req, res) => {
+  const authorList = req.query.authorList.split(",")
   const query = `
   WITH
     AuthorListIsbns AS (
         SELECT isbn
         FROM WorkedOn W
-        WHERE ${helpers.fColInList('W.author_id', authorList)}
+        WHERE ${helpers.fColInList("W.author_id", authorList)}
     ),
 
     Collabs AS (
         SELECT W.author_id, COUNT(*) collab_count
         FROM AuthorListIsbns I
         NATURAL JOIN WorkedOn W
-        WHERE ${helpers.fColNotInList('W.author_id', authorList)}
+        WHERE ${helpers.fColNotInList("W.author_id", authorList)}
         GROUP BY W.author_id
     ),
 
@@ -139,7 +143,7 @@ router.get('/recommendations/authorList', (req, res) => {
         NATURAL JOIN CategoryOf C
         JOIN WorkedOn W ON C.isbn = W.isbn
         JOIN Author A ON W.author_id = A.id
-        WHERE ${helpers.fColNotInList('A.id', authorList)}
+        WHERE ${helpers.fColNotInList("A.id", authorList)}
         GROUP BY A.id
     )
 
@@ -161,11 +165,10 @@ router.get('/recommendations/authorList', (req, res) => {
   db.query(query, (err, results) => {
     if (err) {
       console.error(err)
-      return res.status(500).send('DB Error')
+      return res.status(500).send("DB Error")
     }
     res.json(results)
   })
-
 })
 
 module.exports = router

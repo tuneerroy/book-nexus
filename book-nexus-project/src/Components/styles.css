@@ -1,14 +1,14 @@
 .bookFeed {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .bookImage {
-    height: 300px;
-    object-fit: fill;
+  height: 300px;
+  object-fit: fill;
 }
 
 .authorTable {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }

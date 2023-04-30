@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 
-const validPurposes = ['books', 'authors'];
+const validPurposes = ["books", "authors"];
 
 function FavoritesButton({ purpose, itemId }) {
   if (!validPurposes.includes(purpose)) {
     throw new Error(`Invalid purpose: ${purpose}`);
   }
-  const [favorited, setFavorited] = useState(false);  
+  const [favorited, setFavorited] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,14 +20,14 @@ function FavoritesButton({ purpose, itemId }) {
   }, [purpose, itemId]);
 
   const addItem = () => {
-    setLoading(true)
-    const body = purpose === 'books' ? { isbn: itemId } : { id: itemId };
+    setLoading(true);
+    const body = purpose === "books" ? { isbn: itemId } : { id: itemId };
     fetch(`/api/favorites/${purpose}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
       .then((response) => response.json())
       .then((data) => setFavorited(data.success))
@@ -36,14 +36,14 @@ function FavoritesButton({ purpose, itemId }) {
   };
 
   const removeItem = () => {
-    setLoading(true)
-    const body = purpose === 'books' ? { isbn: itemId } : { id: itemId };
+    setLoading(true);
+    const body = purpose === "books" ? { isbn: itemId } : { id: itemId };
     fetch(`/api/favorites/${purpose}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     })
       .then((response) => response.json())
       .then((data) => setFavorited(!data.success))
@@ -53,35 +53,60 @@ function FavoritesButton({ purpose, itemId }) {
 
   if (loading) {
     return (
-      <Button 
+      <Button
         color={"primary"}
-        variant="contained" 
-        sx={{display: 'flex', alignItems: 'flex-center', height: '60px', width: '200px'}}>
-        <CircularProgress sx={{ display: "flex", alignItems: "flex-center", height: "60px", width: "200px" }} />
+        variant="contained"
+        sx={{
+          display: "flex",
+          alignItems: "flex-center",
+          height: "60px",
+          width: "200px",
+        }}
+      >
+        <CircularProgress
+          sx={{
+            display: "flex",
+            alignItems: "flex-center",
+            height: "60px",
+            width: "200px",
+          }}
+        />
       </Button>
-    )
+    );
   }
 
   if (favorited) {
     return (
-    <Button 
-      onClick={removeItem} 
-      color={"error"}
-      variant="contained" 
-      sx={{display: 'flex', alignItems: 'flex-center', height: '60px', width: '200px'}}>
-      Remove from favorites
-    </Button>
-    )
+      <Button
+        onClick={removeItem}
+        color={"error"}
+        variant="contained"
+        sx={{
+          display: "flex",
+          alignItems: "flex-center",
+          height: "60px",
+          width: "200px",
+        }}
+      >
+        Remove from favorites
+      </Button>
+    );
   } else {
     return (
-    <Button 
-    onClick={addItem}  
-    color={"success"}
-    variant="contained" 
-    sx={{display: 'flex', alignItems: 'flex-center', height: '60px', width: '200px'}}>
-      Add to favorites
-    </Button>
-    )
+      <Button
+        onClick={addItem}
+        color={"success"}
+        variant="contained"
+        sx={{
+          display: "flex",
+          alignItems: "flex-center",
+          height: "60px",
+          width: "200px",
+        }}
+      >
+        Add to favorites
+      </Button>
+    );
   }
 }
 
