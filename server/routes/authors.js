@@ -4,6 +4,7 @@ const db = require('../db')
 const helpers = require('../helpers');
 
 // route to get details of authors based on ids
+// TODO: don't need categories, just id, name, and avg_rating
 router.get('/details', (req, res) => {
   const query = `
     WITH DesiredAuthors AS (
@@ -38,6 +39,7 @@ router.get('/details', (req, res) => {
   })
 })
 
+// TODO: i need id, name, list of categories their books cover, and avg_rating
 router.get('/:id', (req, res) => {
   query = `SELECT name FROM Author WHERE id = ${req.params.id}`
   db.query(query, (err, results) => {
@@ -57,6 +59,7 @@ Parameters:
   - excluding: exclude authors that write books of category on the list
   - andMode: if defined, requires that all (instead of any) categories are met
 */
+// TODO: don't need categories, just id, name, and avg_rating
 router.get('/recommendations/category', (req, res) => {
   req.query.including ?? ''; // TODO: wtf is this for?
   req.query.excluding ?? '';
@@ -108,7 +111,7 @@ Recommends authors using a list of given authors
 params:
   author_list: comma delimited list of given authors
 */
-
+// TODO: don't need categories, just id, name, and avg_rating
 router.get('/recommendations/authorList', (req, res) => {
   const authorList = req.query.authorList.split(',')
   const query = `
