@@ -19,7 +19,7 @@ function Shelf({ title, getItems, purpose = "books", pageSize = 7, params }) {
       .then((data) =>
         setItems((oldData) => {
           if (!data || !data.length) {
-            setPage(page - 1);
+            setPage(Math.max(1, page - 1));
             return oldData;
           }
           return data;
