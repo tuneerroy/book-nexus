@@ -203,7 +203,7 @@ router.get('/recommendations/category', (req, res) => {
   WITH GenrePreferences AS (
     SELECT category, COUNT(*) AS genre_preference
     FROM CategoryOf
-    WHERE isbn IN ${helpers.fColInList('isbn', req.query.books)}
+    WHERE ${helpers.fColInList('isbn', req.query.books.split(','))}
     GROUP BY category
   ), RecIsbn AS (
       SELECT isbn, SUM(genre_preference) AS book_preference
@@ -231,8 +231,8 @@ router.get('/recommendations/category', (req, res) => {
       return res.status(500).send('DB Error')
     }
     results.forEach((result) => {
-      result.categories = result.categories.split(';')
-      result.authors = result.authors.split(';')
+      result.categories = result.categories?.split(';')
+      result.authors = result.authors?.split(';')
     })
     res.json(results)
   })
