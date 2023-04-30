@@ -7,23 +7,7 @@ const helpers = require("../helpers");
 // TODO: don't need categories, just id, name, and avg_rating
 router.get("/details", (req, res) => {
   const query = `
-    WITH DesiredAuthors AS (
-      SELECT id as author_id, name
-      FROM Author
-      WHERE ${helpers.fColInList("id", req.query.ids.split(","))}
-    ),
-    BookCategory AS (
-      SELECT isbn, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories
-      FROM Book
-      NATURAL JOIN CategoryOf
-      GROUP BY isbn
-    )
-    SELECT author_id as id, name, AVG(rating) AS avg_rating, GROUP_CONCAT(DISTINCT categories SEPARATOR ';') AS categories
-    FROM DesiredAuthors
-    NATURAL LEFT JOIN WorkedOn
-    NATURAL LEFT JOIN BookCategory
-    NATURAL LEFT JOIN Review
-    GROUP BY author_id, name
+    SELECT * FROM AuthorView WHERE ${helpers.fColInList("id", req.query.ids.split(","))}
     ${helpers.fGetPage(req.query.page, req.query.pageSize)};
   `;
 
@@ -41,7 +25,7 @@ router.get("/details", (req, res) => {
 
 // TODO: i need id, name, list of categories their books cover, and avg_rating
 router.get("/:id", (req, res) => {
-  query = `SELECT name FROM Author WHERE id = ${req.params.id}`;
+  query = `SELECT * FROM AuthorView WHERE id = ${req.params.id}`;
   db.query(query, (err, results) => {
     if (err) {
       console.error(err);
@@ -80,10 +64,10 @@ router.get("/recommendations/category", (req, res) => {
       WHERE ${helpers.fColInList("category", excludeList)}
     )
 
-    SELECT X.id, X.name, X.avg_rating
+    SELECT X.id, X.name, X.avg_rating, X.categories
     FROM (
-      SELECT A.id, A.name, A.avg_rating, COUNT(*) as count
-      FROM AuthorAvgRating A
+      SELECT A.id, A.name, A.avg_rating, A.categories, COUNT(*) as count
+      FROM AuthorView A
       JOIN WorkedOn W ON A.id = W.author_id
       NATURAL JOIN IncludedBooks I
       GROUP BY A.id, A.name
@@ -147,8 +131,8 @@ router.get("/recommendations/authorList", (req, res) => {
         GROUP BY A.id
     )
 
-    SELECT A.name, A.id, A.avg_rating, P.priority
-    FROM AuthorAvgRating A
+    SELECT A.name, A.id, A.avg_rating, A.categories, P.priority
+    FROM AuthorView A
     NATURAL JOIN (
         SELECT
             author_id AS id,
