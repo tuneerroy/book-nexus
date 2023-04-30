@@ -37,10 +37,10 @@ function HomePage() {
   }
 
   return (
-    <div>
-      <Shelf title={"Favorite Books"} getItems={getFavoriteBooks}/>
+    <div className='px-20'>
+      <Shelf title={"Favorite Books"} purpose={"books"} getItems={getFavoriteBooks}/>
       <br />
-      <Shelf title={"Favorite Authors"} getItems={getFavoriteAuthors}/>
+      <Shelf title={"Favorite Authors"} purpose={"authors"} getItems={getFavoriteAuthors}/>
     </div>
   )
 }

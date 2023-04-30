@@ -122,7 +122,6 @@ router.get('/details', (req, res) => {
 // route for books that match a given set of keywords (for search functionality)
 router.get('/search', (req, res) => {
   const keywords = req.query.keywords
-  console.log('keyword')
   const query = `
   WITH
     TitleMatches AS (
@@ -166,8 +165,6 @@ router.get('/search', (req, res) => {
     ${helpers.fGetPage(req.query.page, req.query.pageSize)};
   `
 
-  console.log(query)
-
   db.query(query, (err, results) => {
     if (err) {
       console.error(err)
@@ -208,7 +205,6 @@ router.get('/:isbn', (req, res) => {
         const [id, name] = author.split('|')
         return {id, name}
       })
-    // console.log(results[0])
     res.json(results[0])
   })
 })
