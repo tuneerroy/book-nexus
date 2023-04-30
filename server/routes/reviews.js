@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
-const helpers = require("../helpers");
 
-router.get("/author/:id", (req, res) => {
+router.get("/authors/:id", (req, res) => {
     const query = `
         SELECT *
         FROM Review R
@@ -20,7 +19,7 @@ router.get("/author/:id", (req, res) => {
     })
 })
 
-router.get("/book/:id", (req, res) => {
+router.get("/books/:id", (req, res) => {
     const query = `
         SELECT *
         FROM Review R
