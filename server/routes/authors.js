@@ -76,10 +76,10 @@ router.get('/recommendations/category', (req, res) => {
       WHERE ${helpers.fColInList('category', excludeList)}
     )
 
-    SELECT X.id, X.name
+    SELECT X.id, X.name, X.avg_rating
     FROM (
-      SELECT A.id, A.name, COUNT(*) as count
-      FROM Author A
+      SELECT A.id, A.name, A.avg_rating, COUNT(*) as count
+      FROM AuthorAvgRating A
       JOIN WorkedOn W ON A.id = W.author_id
       NATURAL JOIN IncludedBooks I
       GROUP BY A.id, A.name
@@ -138,8 +138,8 @@ router.get('/recommendations/authorList', (req, res) => {
         GROUP BY A.id
     )
 
-    SELECT A.name, A.id, P.priority
-    FROM Author A
+    SELECT A.name, A.id, A.avg_rating, P.priority
+    FROM AuthorAvgRating A
     NATURAL JOIN (
         SELECT
             author_id AS id,
