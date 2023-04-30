@@ -13,6 +13,7 @@ function Shelf({title, getItems, purpose="books", params}) {
   const [maxPage, setMaxPage] = useState(Infinity)
 
   useEffect(() => {
+    setLoading(true)
     getItems({...params, pageSize: 7, page})
       .then(data => setItems(oldData => {
         if (!data || !data.length) {
