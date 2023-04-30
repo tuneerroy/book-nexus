@@ -63,7 +63,7 @@ function Book() {
             </div>
           </div>
         </div>
-        <FavoritesButton purpose="books" itemId={isbn}/>
+        <div className='mt-3 md:mt-0'><FavoritesButton purpose="books" itemId={isbn}/></div>
       </div>
       <Shelf title={"Books by the same author"} getItems={getBooks} params={{authors: authors ? authors.map(author => author.name) : ['']}}/>
       <Shelf title={"Books of the same genre"} getItems={getBooks} params={{categories: categories ? categories : ['']}}/>
