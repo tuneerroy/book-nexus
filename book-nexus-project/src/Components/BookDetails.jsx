@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import { getBook, getBooks } from "../api";
+import { getBook, getBooks, getBookReviews } from "../api";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import Shelf from "./Shelf";
@@ -101,6 +101,12 @@ function Book() {
           <FavoritesButton purpose="books" itemId={isbn} />
         </div>
       </div>
+      <Shelf 
+        title={"Reviews"}
+        getItems={({pageSize, page}) => getBookReviews(isbn, pageSize, page)}
+        purpose={"reviews"}
+        pageSize={1}
+      />
       <Shelf
         title={"Books by the same author"}
         getItems={getBooks}

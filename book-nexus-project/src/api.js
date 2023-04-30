@@ -57,4 +57,27 @@ export const searchBooks = async (keywords) => {
   } catch (error) {
     console.log(error);
   }
+}
+
+export const getBookReviews = async (isbn, pageSize, page) => {
+  try {
+    const response = await axios.get(
+      `/api/reviews/books/${isbn}?page=${page}&pageSize=${pageSize}`
+    )
+    console.error(response.data)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
 };
+
+export const getAuthorReviews = async (authorId, pageSize, page) => {
+  try {
+    const response = await axios.get(`/api/reviews/authors/${authorId}?page=${page}&pageSize=${pageSize}`);
+    console.error(response.data)
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+

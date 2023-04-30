@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const helpers = require("../helpers")
 const db = require("../db");
 
 router.get("/authors/:id", (req, res) => {
@@ -9,6 +10,7 @@ router.get("/authors/:id", (req, res) => {
         NATURAL JOIN WorkedOn W
         WHERE W.author_id = ${req.params.id}
         AND review IS NOT NULL
+        ${helpers.fGetPage(req.query.page, req.query.pageSize)}
     `
     db.query(query, (err, results) => {
         if (err) {
@@ -24,7 +26,9 @@ router.get("/books/:id", (req, res) => {
         SELECT *
         FROM Review R
         WHERE R.isbn = ${req.params.id}
-        AND review IS NOT NULL`
+        AND review IS NOT NULL
+        ${helpers.fGetPage(req.query.page, req.query.pageSize)}
+        `
     db.query(query, (err, results) => {
         if (err) {
             console.error(err);

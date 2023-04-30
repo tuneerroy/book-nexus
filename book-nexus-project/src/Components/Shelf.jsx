@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import BookRow from "./BookRow";
 import AuthorRow from "./AuthorRow";
+import ReviewRow from "./ReviewRow";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import LinearProgress from "@mui/material/LinearProgress";
 
-function Shelf({ title, getItems, purpose = "books", params }) {
-  if (!["books", "authors"].includes(purpose))
+function Shelf({ title, getItems, purpose = "books", pageSize = 7, params }) {
+  if (!["books", "authors", "reviews"].includes(purpose))
     throw new Error("Invalid purpose");
 
   const [loading, setLoading] = useState(true);
@@ -14,7 +15,7 @@ function Shelf({ title, getItems, purpose = "books", params }) {
 
   useEffect(() => {
     setLoading(true);
-    getItems({ ...params, pageSize: 7, page })
+    getItems({ ...params, pageSize, page })
       .then((data) =>
         setItems((oldData) => {
           if (!data || !data.length) {
@@ -42,9 +43,9 @@ function Shelf({ title, getItems, purpose = "books", params }) {
               />
               {purpose === "books" ? (
                 <BookRow books={items} />
-              ) : (
+              ) : (purpose === "authors" ? (
                 <AuthorRow authors={items} />
-              )}
+              ) : <ReviewRow reviews={items} />)}
               <BsChevronCompactRight
                 className="text-3xl my-auto cursor-pointer"
                 onClick={() => setPage((page) => page + 1)}

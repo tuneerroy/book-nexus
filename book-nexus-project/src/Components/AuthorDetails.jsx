@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
-import { getAuthor, getBooks } from "../api";
+import { getAuthor, getBooks, getAuthorReviews } from "../api";
 import Shelf from "./Shelf";
 import FavoritesButton from "./FavoritesButton";
 
@@ -44,6 +44,12 @@ function AuthorDetails() {
           <FavoritesButton purpose="authors" itemId={id} />
         </div>
       </div>
+      <Shelf 
+        title={"Reviews"}
+        getItems={({pageSize, page}) => getAuthorReviews(id, pageSize, page)}
+        purpose={"reviews"}
+        pageSize={1}
+      />
       <Shelf
         title={`Top books by ${authorName}`}
         getItems={getBooks}
