@@ -35,12 +35,14 @@ const accountsRouter = require("./routes/accounts");
 const favoriteRouter = require("./routes/favorites");
 const bookRouter = require("./routes/books");
 const authorRouter = require("./routes/authors");
+const reviewRouter = require("./routes/reviews")
 const auth = require("./auth");
 
 app.use("/api/auth", accountsRouter);
 app.use("/api/authors", auth, authorRouter);
 app.use("/api/favorites", auth, favoriteRouter);
 app.use("/api/books", auth, bookRouter);
+app.use("/api/reviews", auth, reviewRouter);
 
 app.use(express.static(path.join(__dirname, "public")));
 app.get("*", (req, res) => {
