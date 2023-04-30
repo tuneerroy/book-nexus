@@ -7,17 +7,24 @@ const helpers = require('../helpers');
 router.get('/details', (req, res) => {
   const query = `
     WITH DesiredAuthors AS (
-      SELECT id, name
+      SELECT id as author_id, name
       FROM Author
-      WHERE ${helpers.fColInList("id", req.query.ids.split(','))}
+      WHERE ${helpers.fColInList("id", req.query.ids.split(","))}
+    ),
+    BookCategory AS (
+      SELECT isbn, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories
+      FROM Book
+      NATURAL JOIN CategoryOf
+      GROUP BY isbn
     )
-    SELECT id, name, AVG(rating) AS avg_rating, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories
+    SELECT author_id as id, name, AVG(rating) AS avg_rating, GROUP_CONCAT(DISTINCT categories SEPARATOR ';') AS categories
     FROM DesiredAuthors
     NATURAL LEFT JOIN WorkedOn
+    NATURAL LEFT JOIN BookCategory
     NATURAL LEFT JOIN Review
-    NATURAL LEFT JOIN CategoryOf
-    GROUP BY id, name
+    GROUP BY author_id, name;
   `
+  
   db.query(query, (err, results) => {
     if (err) {
       console.error(err)
@@ -26,7 +33,6 @@ router.get('/details', (req, res) => {
     results.forEach((result) => {
       result.categories = result.categories && result.categories.split(';')
     })
-    console.log(results)
     res.json(results)
   })
 })
