@@ -197,7 +197,7 @@ router.get('/:isbn/reviews', (req, res) => {
   })
 })
 
-// route for recommendations based off of list of books (isbns) and categories
+// route for recommendations based off of list of books (isbns) - uses categories in bg
 router.get('/recommendations/category', (req, res) => {
   const query = `
   WITH GenrePreferences AS (
