@@ -2,9 +2,9 @@ import React from 'react'
 import Shelf from './Shelf'
 
 const BookRecs = ({ favoriteBooks }) => {
-  const getBooks = async () => {
+  const getBooks = async ({pageSize, page}) => {
     try {
-      const response = await fetch(`/api/books/recommendations/category?books=${favoriteBooks.join(',')}`)
+      const response = await fetch(`/api/books/recommendations/category?books=${favoriteBooks.join(',')}&pageSize=${pageSize}&page=${page}`)
       const data = await response.json()
       console.error(data)
       return data
