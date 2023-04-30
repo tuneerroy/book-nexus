@@ -8,6 +8,7 @@ router.get('/test', (req, res) => {
   const query = `
     SELECT * FROM Book
     LIMIT 36
+    OFFSET 24
   `
   db.query(query, (err, results) => {
     if (err) {
