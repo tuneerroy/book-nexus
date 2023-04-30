@@ -1,3 +1,9 @@
+import React, { useState, useEffect } from 'react'
+import BookRecs from './BookRecs'
+import AuthorRecs from './AuthorRecs'
+import CategoryRecs from './CategoryRecs'
+import Typography from '@mui/material/Typography'
+
 const RecsPage = () => {
   const [favoriteBooks, setFavoriteBooks] = useState([])
   const [favoriteAuthors, setFavoriteAuthors] = useState([])
@@ -15,17 +21,18 @@ const RecsPage = () => {
   return (
     <>
       {favoriteBooks.length ? (
-        <BookRecommendations favoriteBooks={favoriteBooks} />
+        <BookRecs favoriteBooks={favoriteBooks} />
       ) : 
       <Typography variant="h4" component="h4" sx={{ textAlign: 'center' }}>
         You have no favorite books yet!
       </Typography>}
       {favoriteAuthors.length ? (
-        <AuthorRecommendations favoriteAuthors={favoriteAuthors} />
+        <AuthorRecs favoriteAuthors={favoriteAuthors} />
       ) : 
       <Typography variant="h4" component="h4" sx={{ textAlign: 'center' }}>
         You have no favorite authors yet!
       </Typography>}
+      <CategoryRecs />
     </>
   )
 }
