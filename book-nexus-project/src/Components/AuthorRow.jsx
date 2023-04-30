@@ -11,9 +11,6 @@ function AuthorRow({ authors }) {
   };
 
   const getColorFromRating = (rating) => {
-    // const minColor = [0, 0, 250]; // dark blue
-    // const maxColor = [135, 206, 250]; // light blue
-    // const transformValue = i => Math.floor(minColor[i] + (maxColor[i] - minColor[i]) * rating / 5)
     rating = Math.floor(rating);
     switch (rating) {
       case 1:
@@ -29,7 +26,6 @@ function AuthorRow({ authors }) {
       default:
         return "#90e0ef";
     }
-    // return `rgb(${r}, ${g}, ${b})`;
   };
 
   const formatCategories = (genres) => {

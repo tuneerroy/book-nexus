@@ -258,14 +258,14 @@ function BooksPage() {
         <Button
           variant="contained"
           sx={{ width: "100px", backgroundColor: "#457b9d" }}
-          onClick={() => setPage((page) => (page === 0 ? 0 : page - 1))}
+          onClick={() => page > 0 && setPage(page => page - 1)}
         >
           Previous
         </Button>
         <Button
           variant="contained"
           sx={{ width: "100px", backgroundColor: "#457b9d" }}
-          onClick={() => setPage((page) => page + 1)}
+          onClick={() => setPage(page => page + 1)}
         >
           Next
         </Button>
