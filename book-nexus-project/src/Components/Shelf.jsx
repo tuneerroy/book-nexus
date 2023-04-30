@@ -11,7 +11,6 @@ function Shelf({ title, getItems, purpose = "books", params }) {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
-  const [maxPage, setMaxPage] = useState(Infinity);
 
   useEffect(() => {
     setLoading(true);
@@ -19,7 +18,6 @@ function Shelf({ title, getItems, purpose = "books", params }) {
       .then((data) =>
         setItems((oldData) => {
           if (!data || !data.length) {
-            setMaxPage(page - 1);
             setPage(page - 1);
             return oldData;
           }
@@ -49,7 +47,7 @@ function Shelf({ title, getItems, purpose = "books", params }) {
               )}
               <BsChevronCompactRight
                 className="text-3xl my-auto cursor-pointer"
-                onClick={() => page < maxPage && setPage((page) => page + 1)}
+                onClick={() => setPage((page) => page + 1)}
               />
             </>
           ) : (

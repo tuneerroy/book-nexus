@@ -32,6 +32,9 @@ router.get("/:id", (req, res) => {
       return res.status(500).send("DB Error");
     }
     if (results.length === 0) return res.status(404).send("Author not found");
+    results.forEach((result) => {
+      result.categories = result.categories && result.categories.split(";");
+    });
     res.json(results[0].name);
   });
 });
@@ -90,6 +93,9 @@ router.get("/recommendations/category", (req, res) => {
       console.error(err);
       return res.status(500).send("DB Error");
     }
+    results.forEach((result) => {
+      result.categories = result.categories && result.categories.split(";");
+    });
     res.json(results);
   });
 });
@@ -151,6 +157,9 @@ router.get("/recommendations/authorList", (req, res) => {
       console.error(err);
       return res.status(500).send("DB Error");
     }
+    results.forEach((result) => {
+      result.categories = result.categories && result.categories.split(";");
+    });
     res.json(results);
   });
 });

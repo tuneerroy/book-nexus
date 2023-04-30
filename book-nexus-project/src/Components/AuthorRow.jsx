@@ -54,7 +54,7 @@ function AuthorRow({ authors }) {
             <NavLink to={`/authors/${author.id}`}>
               <Avatar
                 sx={{
-                  bgcolor: getColorFromRating(author.priority),
+                  bgcolor: getColorFromRating(author.avg_rating),
                   width: 100,
                   height: 100,
                 }}
@@ -64,9 +64,9 @@ function AuthorRow({ authors }) {
             </NavLink>
             <div className="h-8 w-8 relative bottom-3 left-1 bg-white rounded-full">
               <CircularProgressbar
-                value={author.priority}
+                value={author.avg_rating}
                 maxValue={5}
-                text={`${Math.round(author.priority * 10) / 10}`}
+                text={`${Math.round(author.avg_rating * 10) / 10}`}
                 styles={{
                   path: {
                     stroke: `rgb(245 158 11)`,
