@@ -1,8 +1,7 @@
 const dotenv = require("dotenv");
 const path = require("path");
 dotenv.config({ path: path.join(__dirname, "/../.env") });
-
-const mongodbConnection = require("./userDb/db"); // run the db connection
+require("./userDb/db"); // run the db connection
 
 const express = require("express");
 const morgan = require("morgan");
@@ -45,7 +44,7 @@ app.use("/api/books", auth, bookRouter);
 app.use("/api/reviews", auth, reviewRouter);
 
 app.use(express.static(path.join(__dirname, "public")));
-app.get("*", (req, res) => {
+app.get("*", (_req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
