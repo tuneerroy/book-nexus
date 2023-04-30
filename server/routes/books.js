@@ -90,35 +90,6 @@ router.get('/details', (req, res) => {
   })
 })
 
-// get all details for books with given isbsn
-router.get('/details', (req, res) => {
-  const query = `
-    SELECT isbn, title, image_link, 
-      GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories, 
-      GROUP_CONCAT(DISTINCT CONCAT(author_id, '|', name) SEPARATOR ';') AS authors, 
-      AVG(rating) AS rating
-    FROM Book NATURAL LEFT JOIN CategoryOf NATURAL LEFT JOIN WorkedOn LEFT JOIN Author ON author_id=id NATURAL LEFT JOIN Review
-    WHERE ${helpers.fColInList('isbn', req.query.isbns.split(','))} 
-    GROUP BY isbn
-    ORDER BY AVG(rating) DESC, COUNT(rating) DESC
-    ${helpers.fGetPage(req.query.page, req.query.pageSize)}
-  `
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error(err)
-      return res.status(500).send('DB Error')
-    }
-    results.forEach((result) => {
-      result.categories = result.categories && result.categories.split(';')
-      result.authors = result.authors && result.authors.split(';').map((author) => {
-        const [id, name] = author.split('|')
-        return {id, name}
-      })
-    })
-    res.json(results)
-  })
-})
-
 // route for books that match a given set of keywords (for search functionality)
 router.get('/search', (req, res) => {
   const keywords = req.query.keywords
