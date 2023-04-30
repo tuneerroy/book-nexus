@@ -5,6 +5,8 @@ import  { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
 import LinearProgress from '@mui/material/LinearProgress'
 
 function Shelf({title, getItems, purpose="books", params}) {
+  if (!["books", "authors"].includes(purpose)) throw new Error("Invalid purpose")
+  
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
