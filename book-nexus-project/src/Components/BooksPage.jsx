@@ -215,9 +215,10 @@ function BooksPage() {
                 ))
             }
             </Grid>
-            <Button onClick={() => setPage(page => page === 0 ? 0 : page - 1)}>Previous Page</Button>
-            <Button onClick={() => setPage(page => page + 1)}>Next Page</Button>
-            {page + 1}
+            <Box sx={{display: 'flex', justifyContent: 'space-between', marginBottom: '10px'}}>
+                <Button variant="contained" sx={{width: '100px', backgroundColor: '#457b9d'}} onClick={() => setPage(page => page === 0 ? 0 : page - 1)}>Previous</Button>
+                <Button variant="contained" sx={{width: '100px', backgroundColor: '#457b9d'}} onClick={() => setPage(page => page + 1)}>Next</Button>
+            </Box>
         </Box>
     )
 }

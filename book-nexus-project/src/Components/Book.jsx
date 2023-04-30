@@ -3,6 +3,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { NavLink } from 'react-router-dom';
 import './styles.css'
 
@@ -28,7 +29,7 @@ function Book({isbn, title, image_link}) {
           </Typography>
         </CardContent>
         <CardActions sx={{display: 'flex', justifyContent: 'center', padding: 2}}>
-          <NavLink to={`${isbn}`}>Learn More</NavLink>
+          <NavLink to={`${isbn}`}><Box sx={{color: '#1d3557', fontWeight: 600}}>Learn More</Box></NavLink>
         </CardActions>
       </Card>
     )
