@@ -22,7 +22,8 @@ router.get('/details', (req, res) => {
     NATURAL LEFT JOIN WorkedOn
     NATURAL LEFT JOIN BookCategory
     NATURAL LEFT JOIN Review
-    GROUP BY author_id, name;
+    GROUP BY author_id, name
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)};
   `
 
   db.query(query, (err, results) => {
