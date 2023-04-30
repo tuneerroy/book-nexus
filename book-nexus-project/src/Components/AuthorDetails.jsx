@@ -3,12 +3,7 @@ import { NavLink, useParams } from "react-router-dom";
 import { getAuthor, getBooks } from "../api";
 import Shelf from "./Shelf";
 import FavoritesButton from "./FavoritesButton";
-
-const authors = [
-  { id: 1, name: "J.K. Rowling" },
-  { id: 2, name: "J.R.R. Tolkien" },
-  { id: 3, name: "Stephen King" },
-];
+import AuthorRecs from "./AuthorRecs";
 
 function AuthorDetails() {
   const { id } = useParams();
@@ -22,22 +17,11 @@ function AuthorDetails() {
     <div className="py-5 px-20">
       <div className="flex flex-col md:flex-row justify-between">
         <div>
-          <h1 className="text-2xl">
+          <h1 className="text-2xl pl-9 pb-10">
             Author: <span className="font-bold">{authorName}</span>
           </h1>
           <div>
-            <h2 className="text-2xl font-semibold my-5">Similar authors</h2>
-            <div className="space-x-3">
-              {authors.map((author) => (
-                <NavLink
-                  key={author.id}
-                  to={`/authors/${author.id}`}
-                  className="text-lg font-medium text-blue-600 hover:text-blue-800"
-                >
-                  {author.name}
-                </NavLink>
-              ))}
-            </div>
+            <AuthorRecs favoriteAuthors={[id]} title={"Similar authors"}/>
           </div>
         </div>
         <div className="mt-3 md:mt-0">

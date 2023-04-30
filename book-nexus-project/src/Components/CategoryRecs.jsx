@@ -46,7 +46,7 @@ const CategoryRecs = () => {
   };
 
   return (
-    <div style={{ paddingTop: 100, maxWidth: 1200, margin: "auto" }}>
+    <div style={{ paddingTop: 100, margin: "auto" }}>
       <Box sx={{ maxWidth: 600, margin: "auto" }}>
         <Typography variant="h5" sx={{ textAlign: "left" }}>
           Filter Genres

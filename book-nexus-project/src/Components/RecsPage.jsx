@@ -20,7 +20,7 @@ const RecsPage = () => {
   }, []);
 
   return (
-    <>
+    <div className="px-20">
       {favoriteBooks.length ? (
         <BookRecs favoriteBooks={favoriteBooks} />
       ) : (
@@ -42,7 +42,7 @@ const RecsPage = () => {
       <Box sx={{ marginBottom: 10 }}>
         <CategoryRecs />
       </Box>
-    </>
+    </div>
   );
 };
 

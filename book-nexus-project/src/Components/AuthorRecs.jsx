@@ -1,7 +1,7 @@
 import React from "react";
 import Shelf from "./Shelf";
 
-const AuthorRecs = ({ favoriteAuthors }) => {
+const AuthorRecs = ({ favoriteAuthors, title }) => {
   const getAuthors = async ({ page, pageSize }) => {
     try {
       const response = await fetch(
@@ -18,7 +18,7 @@ const AuthorRecs = ({ favoriteAuthors }) => {
 
   return (
     <Shelf
-      title={"Author Recommendations"}
+      title={title ? title : "Author Recommendations"}
       getItems={getAuthors}
       purpose={"authors"}
     />
