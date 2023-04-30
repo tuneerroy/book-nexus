@@ -17,7 +17,7 @@ const PrivateRoute = ({ Component, ...props }) => {
       .then((res) => res.json())
       .then((data) => {
         if (!data.authenticated) {
-          navigate("/", { replace: true });
+          navigate("/books", { replace: true });
         } else {
           setIsLoading(false);
         }
@@ -44,12 +44,15 @@ const PrivateRoute = ({ Component, ...props }) => {
       <AppBar position="relative" sx={{ backgroundColor: "#023047" }}>
         <Toolbar>
           <Typography variant="h5" sx={{ paddingRight: 5 }}>
-            <NavLink to={`/home`} className="title">
+            <NavLink to={`/books`} className="title">
               Book Nexus
             </NavLink>
           </Typography>
           <Button color="inherit" component={NavLink} to="/books">
             Books
+          </Button>
+          <Button color="inherit" component={NavLink} to="/favorites">
+            Favorites
           </Button>
           <Button color="inherit" component={NavLink} to="/recommendations">
             Recommendations

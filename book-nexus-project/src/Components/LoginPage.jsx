@@ -16,7 +16,7 @@ const LoginPage = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.authenticated) {
-          navigate("/home", { replace: true });
+          navigate("/books", { replace: true });
         }
       })
       .catch((err) => console.log(err));

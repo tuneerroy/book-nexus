@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" exact element={<LoginPage />} />
         <Route
-          path="/home"
+          path="/favorites"
           exact
           element={<PrivateRoute Component={HomePage} />}
         />
