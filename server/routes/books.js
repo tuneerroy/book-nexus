@@ -3,12 +3,11 @@ const router = express.Router();
 const db = require("../db");
 const helpers = require("../helpers");
 
-// TODO: remove this eventually
-router.get("/test", (req, res) => {
+router.get("/random", (req, res) => {
   const query = `
     SELECT * FROM Book
-    LIMIT 36
-    OFFSET 24
+    ORDER BY RAND()
+    LIMIT 30;
   `;
   db.query(query, (err, results) => {
     if (err) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Book from "./Book";
 import "./styles.css";
 import Grid from "@mui/material/Grid";
@@ -14,23 +14,27 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { searchBooks, getBooks } from "../api";
+import { CircularProgress } from "@mui/material";
 
 function BooksPage() {
+  const [loading, setLoading] = useState(true);
   const [books, setBooks] = useState([]);
   const [page, setPage] = useState(0);
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    fetch("/api/books/test")
+    fetch("/api/books/random")
       .then((res) => res.json())
       .then((data) => {
         setBooks(data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }, []);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const authors =
       e.target.Authors.value.length === 0
         ? undefined
@@ -64,16 +68,34 @@ function BooksPage() {
     });
     setBooks(res);
     setPage(0);
+    setLoading(false);
   };
 
   const handleKeywordSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const keywords = e.target.search.value.split(" ");
     const res = await searchBooks(keywords);
     setBooks(res);
     setPage(0);
+    setLoading(false);
   };
 
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+  
   return (
     <Box
       className="bookFeed"
