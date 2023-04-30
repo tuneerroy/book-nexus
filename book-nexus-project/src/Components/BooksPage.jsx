@@ -8,8 +8,6 @@ import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import {Accordion, AccordionSummary, AccordionDetails, Typography} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { ThemeProvider } from '@emotion/react';
-import { createTheme } from "@mui/material";
 import { searchBooks, getBooks } from '../api';
 
 function BooksPage() {
@@ -26,19 +24,8 @@ function BooksPage() {
             })
             .catch(err => console.log(err))
     }, []);
-
-    // useEffect(() => {
-    //     getBooks({pageSize: 9, page}).then(setBooks)
-    //   }, [getBooks, page])
-
-    const theme = createTheme({
-        typography: {
-        //   fontFamily: 'Times New Roman, Arial',
-        //   htmlFontSize: '12',
-        }
-      });
-
-      const handleFormSubmit = async (e) => {
+      
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
         const authors = e.target.Authors.value.length === 0 ? undefined : e.target.Authors.value.split(',').map(author => author.trim());
         const categories = e.target.Genres.value.length === 0 ? undefined : e.target.Genres.value.split(',').map(category => category.trim());
@@ -65,9 +52,7 @@ function BooksPage() {
             <Box sx={{width: '75%', marginX: 'auto'}}>
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <ThemeProvider theme={theme}>
                             <Typography variant="h5">Search Books</Typography>
-                        </ThemeProvider>
                     </AccordionSummary>
                     <AccordionDetails>
                     <Switch
@@ -80,7 +65,6 @@ function BooksPage() {
                     {checked ? <form onSubmit={handleKeywordSubmit}>
                                   <Grid container spacing={2}>
                                     <Grid item xs={12}>
-                                        <ThemeProvider theme={theme}>
                                             <Typography>
                                                 <TextField
                                                     label="Search by keyword"
@@ -89,7 +73,6 @@ function BooksPage() {
                                                     name="search"
                                                 />
                                             </Typography>
-                                        </ThemeProvider>
                                     </Grid>
                                   </Grid>
                                   <Grid item xs={12} sx={{marginTop: 1}}>
@@ -102,7 +85,6 @@ function BooksPage() {
                         <form onSubmit={handleFormSubmit}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <ThemeProvider theme={theme}>
                                         <Typography>
                                             <TextField
                                                 label="Authors"
@@ -112,10 +94,8 @@ function BooksPage() {
                                                 helperText="Separate authors with commas"
                                             />
                                         </Typography>
-                                    </ThemeProvider>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ThemeProvider theme={theme}>
                                         <Typography>
                                             <TextField
                                                 label="Genres"
@@ -125,10 +105,8 @@ function BooksPage() {
                                                 helperText="Separate genres with commas"
                                             />
                                         </Typography>
-                                    </ThemeProvider>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ThemeProvider theme={theme}>
                                         <Typography>
                                             <TextField
                                             label="Year Low"
@@ -140,10 +118,8 @@ function BooksPage() {
                                             helperText="Leave blank for no lower bound"
                                             />
                                         </Typography>
-                                    </ThemeProvider>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ThemeProvider theme={theme}>
                                         <Typography>
                                             <TextField
                                             label="Year High"
@@ -155,10 +131,8 @@ function BooksPage() {
                                             helperText="Leave blank for no upper bound"
                                             />
                                         </Typography>
-                                    </ThemeProvider>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ThemeProvider theme={theme}>
                                         <Typography>
                                             <TextField
                                             label="Rating Low"
@@ -170,10 +144,8 @@ function BooksPage() {
                                             helperText="Leave blank for no lower bound"
                                             />
                                         </Typography>
-                                    </ThemeProvider>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <ThemeProvider theme={theme}>
                                         <Typography>
                                             <TextField
                                             label="Rating High"
@@ -185,7 +157,6 @@ function BooksPage() {
                                             helperText="Leave blank for no upper bound"
                                             />
                                         </Typography>
-                                    </ThemeProvider>
                                 </Grid>
                                 <Grid item xs={12} sx={{marginTop: 1}}>
                                     <Button variant="contained" color="info" type="submit">
