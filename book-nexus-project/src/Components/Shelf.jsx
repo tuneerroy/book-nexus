@@ -5,6 +5,8 @@ import  { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
 import LinearProgress from '@mui/material/LinearProgress'
 
 function Shelf({title, getItems, purpose="books", params}) {
+  if (!["books", "authors"].includes(purpose)) throw new Error("Invalid purpose")
+  
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
   const [page, setPage] = useState(1)
@@ -16,15 +18,15 @@ function Shelf({title, getItems, purpose="books", params}) {
   
   return (
     <div>
-      <h2 className='text-2xl font-semibold my-5'>{title}</h2>
+      <h2 className='text-2xl font-semibold my-5 ml-9'>{title}</h2>
       {loading ? <LinearProgress /> : 
       <div className='flex flex-row w-full min-h-[10vw]'>
-        {items.length ?
+        {items && items.length ?
         <>
-          <BsChevronCompactLeft className='text-3xl relative top-[7vw] cursor-pointer' onClick={() => setPage(page => page - 1)}/>
+          <BsChevronCompactLeft className='text-3xl my-auto cursor-pointer' onClick={() => setPage(page => page - 1)}/>
           {purpose === "books" ? <BookRow books={items} /> : <AuthorRow authors={items} />}
-          <BsChevronCompactRight className='text-3xl relative top-[7vw] cursor-pointer' onClick={() => setPage(page => page + 1)}/>
-        </> : <div>No items to display</div>}
+          <BsChevronCompactRight className='text-3xl my-auto cursor-pointer' onClick={() => setPage(page => page + 1)}/>
+        </> : <div className='pl-9' >No items to display</div>}
       </div>}
     </div>
   )

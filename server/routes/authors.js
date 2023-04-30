@@ -24,7 +24,7 @@ router.get('/details', (req, res) => {
     NATURAL LEFT JOIN Review
     GROUP BY author_id, name;
   `
-  
+
   db.query(query, (err, results) => {
     if (err) {
       console.error(err)
@@ -57,7 +57,7 @@ Parameters:
   - andMode: if defined, requires that all (instead of any) categories are met
 */
 router.get('/recommendations/category', (req, res) => {
-  req.query.including ?? '';
+  req.query.including ?? ''; // TODO: wtf is this for?
   req.query.excluding ?? '';
   const includeList = req.query.including.split(',')
   const excludeList = req.query.excluding.split(',')
@@ -90,7 +90,8 @@ router.get('/recommendations/category', (req, res) => {
       FROM ExcludedBooks E
       NATURAL JOIN WorkedOn W
       )
-    ORDER BY count DESC;`
+    ORDER BY count DESC
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)};`
 
     db.query(query, (err, results) => {
       if (err) {
