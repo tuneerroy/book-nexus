@@ -3,6 +3,40 @@ const router = express.Router()
 const db = require('../db')
 const helpers = require('../helpers');
 
+// route to get details of authors based on ids
+router.get('/details', (req, res) => {
+  const query = `
+    WITH DesiredAuthors AS (
+      SELECT id as author_id, name
+      FROM Author
+      WHERE ${helpers.fColInList("id", req.query.ids.split(","))}
+    ),
+    BookCategory AS (
+      SELECT isbn, GROUP_CONCAT(DISTINCT category SEPARATOR ';') AS categories
+      FROM Book
+      NATURAL JOIN CategoryOf
+      GROUP BY isbn
+    )
+    SELECT author_id as id, name, AVG(rating) AS avg_rating, GROUP_CONCAT(DISTINCT categories SEPARATOR ';') AS categories
+    FROM DesiredAuthors
+    NATURAL LEFT JOIN WorkedOn
+    NATURAL LEFT JOIN BookCategory
+    NATURAL LEFT JOIN Review
+    GROUP BY author_id, name;
+  `
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).send('DB Error')
+    }
+    results.forEach((result) => {
+      result.categories = result.categories && result.categories.split(';')
+    })
+    res.json(results)
+  })
+})
+
 router.get('/:id', (req, res) => {
   query = `SELECT name FROM Author WHERE id = ${req.params.id}`
   db.query(query, (err, results) => {
@@ -23,7 +57,7 @@ Parameters:
   - andMode: if defined, requires that all (instead of any) categories are met
 */
 router.get('/recommendations/category', (req, res) => {
-  req.query.including ?? '';
+  req.query.including ?? ''; // TODO: wtf is this for?
   req.query.excluding ?? '';
   const includeList = req.query.including.split(',')
   const excludeList = req.query.excluding.split(',')
@@ -42,20 +76,22 @@ router.get('/recommendations/category', (req, res) => {
       WHERE ${helpers.fColInList('category', excludeList)}
     )
 
-    SELECT *
+    SELECT X.id, X.name
     FROM (
-      SELECT A.id, A.name
+      SELECT A.id, A.name, COUNT(*) as count
       FROM Author A
       JOIN WorkedOn W ON A.id = W.author_id
       NATURAL JOIN IncludedBooks I
       GROUP BY A.id, A.name
       HAVING ${andMode ? `COUNT(DISTINCT I.category) = ${includeList.length}` : `COUNT(*) > 0`}
-      ORDER BY COUNT(*)) X
+    ) X
     WHERE X.id NOT IN (
       SELECT W.author_id AS id
       FROM ExcludedBooks E
       NATURAL JOIN WorkedOn W
-      );`
+      )
+    ORDER BY count DESC
+    ${helpers.fGetPage(req.query.page, req.query.pageSize)};`
 
     db.query(query, (err, results) => {
       if (err) {

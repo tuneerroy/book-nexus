@@ -21,7 +21,7 @@ function FavoritesButton({ purpose, itemId }) {
 
   const addItem = () => {
     setLoading(true)
-    const body = purpose === 'books' ? { isbn: itemId } : { authorId: itemId };
+    const body = purpose === 'books' ? { isbn: itemId } : { id: itemId };
     fetch(`/api/favorites/${purpose}`, {
       method: "POST",
       headers: {
@@ -37,7 +37,7 @@ function FavoritesButton({ purpose, itemId }) {
 
   const removeItem = () => {
     setLoading(true)
-    const body = purpose === 'books' ? { isbn: itemId } : { authorId: itemId };
+    const body = purpose === 'books' ? { isbn: itemId } : { id: itemId };
     fetch(`/api/favorites/${purpose}`, {
       method: "DELETE",
       headers: {
@@ -56,8 +56,8 @@ function FavoritesButton({ purpose, itemId }) {
       <Button 
         color={"primary"}
         variant="contained" 
-        sx={{display: 'flex', alignItems: 'flex-start', height: '60px', width: '200px'}}>
-        <CircularProgress sx={{ display: "flex", alignItems: "flex-start", height: "60px", width: "200px" }} />
+        sx={{display: 'flex', alignItems: 'flex-center', height: '60px', width: '200px'}}>
+        <CircularProgress sx={{ display: "flex", alignItems: "flex-center", height: "60px", width: "200px" }} />
       </Button>
     )
   }
@@ -68,7 +68,7 @@ function FavoritesButton({ purpose, itemId }) {
       onClick={removeItem} 
       color={"error"}
       variant="contained" 
-      sx={{display: 'flex', alignItems: 'flex-start', height: '60px', width: '200px'}}>
+      sx={{display: 'flex', alignItems: 'flex-center', height: '60px', width: '200px'}}>
       Remove from favorites
     </Button>
     )
@@ -78,7 +78,7 @@ function FavoritesButton({ purpose, itemId }) {
     onClick={addItem}  
     color={"success"}
     variant="contained" 
-    sx={{display: 'flex', alignItems: 'flex-start', height: '60px', width: '200px'}}>
+    sx={{display: 'flex', alignItems: 'flex-center', height: '60px', width: '200px'}}>
       Add to favorites
     </Button>
     )
