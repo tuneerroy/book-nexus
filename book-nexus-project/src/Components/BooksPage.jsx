@@ -40,7 +40,6 @@ function BooksPage() {
 
       const searchBooksWrapper = async (e) => {
         const res = await searchBooks(e);
-        const page_res = res.slice(12*page, 12*(page + 1))
         setBooks(res);
       }
 

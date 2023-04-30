@@ -63,8 +63,8 @@ const LoginPage = () => {
   const handleFacebookLogin = () => window.location.href = '/api/auth/facebook'
   
   return (
-    <>
-      <Typography variant="h3" component="h1" style={{ marginBottom: '1rem', fontWeight: 600 }}>
+    <Container sx={{width: '80%', backgroundColor: 'white', borderRadius: '8px', paddingTop: '1px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginX: 'auto', marginY: '10em', paddingY: '2.5em'}}>
+      <Typography variant="h3" component="h1" style={{ fontWeight: 600, display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
         Book Nexus
       </Typography>
       {error && <Typography color="error">{error}</Typography>}
@@ -81,6 +81,7 @@ const LoginPage = () => {
               value={email}
               onChange={e => setEmail(e.target.value)}
               autoFocus
+              sx={{backgroundColor: 'white'}}
             />
             <TextField
               variant="outlined"
@@ -92,20 +93,22 @@ const LoginPage = () => {
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              sx={{backgroundColor: 'white', marginBottom: '2em'}}
             />
             <Button
               fullWidth
               variant="contained"
               color="primary"
               onClick={handleLogin}
+              sx={{marginY: '0.5em'}}
             >
               Sign In
             </Button>
             <Button
               fullWidth
               variant="contained"
-              color="warning"
               onClick={handleRegister}
+              sx={{marginBottom: '1em', backgroundColor: '#a8d6dc'}}
             >
               Register
             </Button>
@@ -127,7 +130,7 @@ const LoginPage = () => {
               <Grid item xs={12} sm={6}>
                 <Button
                   fullWidth
-                  variant="outlined"
+                  variant="contained"
                   color="info"
                   startIcon={<FacebookIcon />}
                   onClick={handleFacebookLogin}
@@ -139,7 +142,7 @@ const LoginPage = () => {
           </form>
         </div>
       </Container>
-    </>
+    </Container>
   );
 }
 
