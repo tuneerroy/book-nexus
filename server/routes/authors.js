@@ -76,20 +76,21 @@ router.get('/recommendations/category', (req, res) => {
       WHERE ${helpers.fColInList('category', excludeList)}
     )
 
-    SELECT *
+    SELECT X.id, X.name
     FROM (
-      SELECT A.id, A.name
+      SELECT A.id, A.name, COUNT(*) as count
       FROM Author A
       JOIN WorkedOn W ON A.id = W.author_id
       NATURAL JOIN IncludedBooks I
       GROUP BY A.id, A.name
       HAVING ${andMode ? `COUNT(DISTINCT I.category) = ${includeList.length}` : `COUNT(*) > 0`}
-      ORDER BY COUNT(*)) X
+    ) X
     WHERE X.id NOT IN (
       SELECT W.author_id AS id
       FROM ExcludedBooks E
       NATURAL JOIN WorkedOn W
-      );`
+      )
+    ORDER BY count DESC;`
 
     db.query(query, (err, results) => {
       if (err) {
