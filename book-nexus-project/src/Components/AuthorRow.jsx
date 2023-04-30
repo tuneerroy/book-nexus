@@ -11,10 +11,25 @@ function AuthorRow({authors}) {
   }
 
   const getColorFromRating = (rating) => {
-    const minColor = [0, 0, 250]; // dark blue
-    const maxColor = [135, 206, 250]; // light blue
-    const transformValue = i => Math.floor(minColor[i] + (maxColor[i] - minColor[i]) * rating / 5)
-    return `rgb(${transformValue(0)}, ${transformValue(1)}, ${transformValue(2)})`;
+    // const minColor = [0, 0, 250]; // dark blue
+    // const maxColor = [135, 206, 250]; // light blue
+    // const transformValue = i => Math.floor(minColor[i] + (maxColor[i] - minColor[i]) * rating / 5)
+    rating = Math.floor(rating)
+    switch (rating) {
+      case 1:
+        return '#90e0ef'
+      case 2:
+        return '#00b4d8'
+      case 3:
+        return '#0077b6'
+      case 4:
+        return '#023e8a'
+      case 5:
+        return '#03045e'
+      default:
+        return '#90e0ef'
+    }
+    // return `rgb(${r}, ${g}, ${b})`;
   }
 
   const formatCategories = (genres) => {
@@ -26,14 +41,14 @@ function AuthorRow({authors}) {
   const stringToInitials = str => str.split(' ').map((word) => word.charAt(0)).join('')
 
   return (
-    <div className='flex flex-row w-full space-x-2 md:space-x-6'>
+    <div className='flex flex-row w-full space-x-2 md:space-x-6 mt-12'>
       {authors && authors.map(author => (
         <div key={author.id} className='w-[14.2857%] flex flex-col'>
           <NavLink to={`/authors/${author.id}`}>
-            <Avatar sx={{bgcolor: getColorFromRating(author.avg_rating), width: 70, height: 70}} >{stringToInitials(author.name)}</Avatar>
+            <Avatar sx={{bgcolor: getColorFromRating(author.priority), width: 100, height: 100}} >{stringToInitials(author.name)}</Avatar>
           </NavLink>
           <div className='h-8 w-8 relative bottom-3 left-1 bg-white rounded-full'>
-            <CircularProgressbar value={author.avg_rating} maxValue={5} text={`${Math.round(author.avg_rating * 10) / 10}`} 
+            <CircularProgressbar value={author.priority} maxValue={5} text={`${Math.round(author.priority * 10) / 10}`} 
               styles={{
                 path: {
                   stroke: `rgb(245 158 11)`,
