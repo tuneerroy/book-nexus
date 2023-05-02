@@ -45,7 +45,7 @@ const LoginPage = () => {
       .then((res) => {
         switch (res.status) {
           case 200:
-            window.location.href = "/home";
+            window.location.href = "/books";
           case 400:
             return res.json();
           default:

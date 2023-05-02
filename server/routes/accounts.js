@@ -66,7 +66,7 @@ router.get("/google", passport.authenticate("google", { scope: ["email"] }));
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/home",
+    successRedirect: "/books",
     failureRedirect: "/",
   })
 );
@@ -78,7 +78,7 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    successRedirect: "/home",
+    successRedirect: "/books",
     failureRedirect: "/",
   })
 );
