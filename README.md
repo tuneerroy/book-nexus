@@ -1,15 +1,23 @@
 # Book Nexus
 
 ## Description
+Many of us on the development team are avid readers that are open to book recommendations. Therefore we thought creating a tool to help people like us find books to read would make for a good project.
 
-Welcome to Book Nexus. We know that finding the next book to read from such a wide selection of options is hard. Our app will help with that, by recommending books or authors to users based on a wide variety of inputs that the user can provide.
+Firstly, we wanted to make a way to search through a large catalog of books for specific criteria. Users are able to either search using keywords for a natural language search, or browse books by using a set of filters on authors, genres, years, and ratings.
 
-Through our application, you will be able to view details of top rated authors and books from a selected of hundreds of thousands of titles.
+From there they can select a book page to view information about the book, reviews for it, and other similar books.
+
+Secondly, we wanted to make recommendations based on our preferences. Our application allows one to flag books and authors as favorites. We then use those preferences to guess what other authors and books the user may like, via aggregating genre preferences and checking for similarities in reviews.
 
 ## Guide to repo:
 
-The src directory contains the main page of the appliaction, and all the React components for the project.
-The backend directory contains the backend of the application.
+- **book-nexus-project**: front-end of the application
+  - **public**: static files for application
+  - **src**: source folder with React components and Javascript files, and CSS files
+    - **Components**: React components
+- **server**: back-end of the application
+  - **routes**: routes for SQL and MongoDB queries
+  - **userDB**: connection and schemas for MongoDB 
 
 ## Running app locally:
 
