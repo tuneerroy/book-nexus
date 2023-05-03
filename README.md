@@ -16,3 +16,5 @@ The backend directory contains the backend of the application.
 If a `.env` file doesn't exist, please email one of us to get the file.
 
 Run `npm install` in the root directory, and then `npm start` to start the backend. Then enter the `book-nexus-project` directory and, similarly, run `npm install` followed by `npm start` to start the frontend. The application will be running in `localhost:3000`. 
+
+Note that login via Facebook and Google are not possible locally and can only be done on the deployed site. This is because they need to redirect to a URL that is not localhost.
